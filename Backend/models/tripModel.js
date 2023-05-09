@@ -1,11 +1,9 @@
 import mongoose from 'mongoose';
-
+import {customAlphabet, nanoid} from 'nanoid';
+const nano = customAlphabet('1234567890', 6);
 
 const schoolTripSchema = new mongoose.Schema({
-    code: {
-        type: Number,
-        required: true
-    },
+  
     teacher_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Teacher',
@@ -14,6 +12,20 @@ const schoolTripSchema = new mongoose.Schema({
     students_id: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Student'
     }],
+    trip_name:{
+        type: String,
+        required: true
+    },
+    code: {
+        type: Number,
+        required: false
+    },
+    trip_status:{
+        type: String,
+        required: true,
+        enum: ["preparation", "in_progress", "finished"],
+        default: "preparation"
+    },
     start_date:{
         type: Date,
         required: true
@@ -30,18 +42,30 @@ const schoolTripSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    trip_name:{
-        type: String,
-        required: true
-    },
+
     trip_description:{
         type: String,
-        required: true
+        required: true,
+        maxLength: 500
     },
-    trip_status:{
-        type: String,
-        required: true
-    },
+
+
     });
+
+    schoolTripSchema.pre('save', async function (next) {
+
+        const randomCode = nano(6);
+        do {
+            const checkCode = await mongoose.model('SchoolTrip', schoolTripSchema).findOne({code: randomCode});
+            if (checkCode) {
+                randomCode = nano(6);
+            }
+            else {
+                this.code = randomCode;
+                break;
+            }
+        } while (true);
+    
+      });
 
 export default mongoose.model('SchoolTrip', schoolTripSchema);
