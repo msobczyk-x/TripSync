@@ -1,5 +1,6 @@
 import React, { createContext, useReducer, useEffect, useContext } from 'react';
 import * as SecureStore from 'expo-secure-store';
+import axios from 'axios';
 const initialState = {
     user: null,
     isAuthenticated: false,
@@ -7,18 +8,20 @@ const initialState = {
     // Add more properties if needed
   };
 
-  const authReducer = (state, action) => {
+  const authReducer = (state: any, action: any) => {
     switch (action.type) {
       case 'LOGIN':
         return {
           ...state,
-          user: action.payload,
+          user: action.payload.user,
+          role: action.payload.role,
           isAuthenticated: true,
         };
       case 'LOGOUT':
         return {
           ...state,
           user: null,
+          role: '',
           isAuthenticated: false,
         };
       // Add more cases for other actions if needed
@@ -33,14 +36,20 @@ export const AuthContext = createContext({});
 export const useAuth = () => {
   const [state, dispatch]:any = useContext(AuthContext);
 
-  const login = (user) => {
-    dispatch({ type: 'LOGIN', payload: user });
+  const login = (user: any, role:any) => {
+
+    dispatch({ type: 'LOGIN', payload: {user, role} });
+    SecureStore.setItemAsync('user', JSON.stringify(user));
+    SecureStore.setItemAsync('isAuthenticated', JSON.stringify(true));
+    SecureStore.setItemAsync('role', JSON.stringify(role));
   };
 
   const logout = () => {
     dispatch({ type: 'LOGOUT' });
     SecureStore.deleteItemAsync('user');
     SecureStore.deleteItemAsync('isAuthenticated');
+    SecureStore.deleteItemAsync('role');
+    SecureStore.deleteItemAsync('userEmail');
   };
 
   // Add more methods if needed
@@ -55,7 +64,7 @@ export const useAuth = () => {
 
 
 
-const AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }:any) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
   
     // Perform any necessary initialization or side effects here, such as checking local storage for persisted authentication state

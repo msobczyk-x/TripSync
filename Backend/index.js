@@ -21,7 +21,9 @@ const start = async () => {
   dotenv.config();
   const app = express();
 
-  app.use(cors());
+  app.options("*", cors({ origin: 'http://localhost:19000', optionsSuccessStatus: 200 }));
+  
+  app.use(cors({ origin: "http://localhost:19000", optionsSuccessStatus: 200 }));
 
   const mongoString = process.env.DATABASE_URL;
   app.use(express.json());

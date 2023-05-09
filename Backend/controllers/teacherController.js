@@ -59,9 +59,19 @@ async function updateTeacherDeviceId(req,res) {
     }
 
 async function loginTeacherEmail (req, res) {
+  console.log(req.body.email)
     try {
-        const teacher = await Teacher.findOne({ email: req.params.email });
-        res.json(teacher);
+        const teacher = await Teacher.findOne({ email: req.body.email });
+        console.log(teacher)
+        if (teacher == null) {
+          return res.status(400).send('Invalid email');
+        }
+        else {
+          res.json(teacher.code);
+        }
+        
+
+        
         } catch (err) {
         res.status(500).json({ message: err.message });
         }
@@ -69,8 +79,13 @@ async function loginTeacherEmail (req, res) {
 
 async function loginTeacherCode (req, res) {
     try {
-        const teacher = await Teacher.findOne({ code: req.params.code });
-        res.json(teacher);
+        const teacher = await Teacher.findOne({ code: req.body.code });
+        if (teacher == null) {
+          return res.status(400).send('Invalid code' );
+        }
+        else {
+          res.json(teacher);
+        }
         } catch (err) {
         res.status(500).json({ message: err.message });
         }

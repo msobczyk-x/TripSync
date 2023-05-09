@@ -30,8 +30,8 @@ router.post("/addTeacher", addTeacher);
 router.patch("/updateStudentLocalization/:id", updateStudentLocalization);
 
 router.patch("/updateStudentDeviceId/:id", updateStudentDeviceId);
-router.post("/loginStudentEmail/", loginStudentEmail);
-router.post("/loginStudentCode/", loginStudentCode);
+router.post("/loginStudentEmail", loginStudentEmail);
+router.post("/loginStudentCode", loginStudentCode);
 
 //Teacher
 
