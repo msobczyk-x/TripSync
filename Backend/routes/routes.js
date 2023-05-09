@@ -1,20 +1,24 @@
-const express = require("express");
-
+import express from "express";
 const router = express.Router();
-const Student = require("../database/models/studentModel.js");
-const Teacher = require("../database/models/teacherModel.js");
-const SchoolTrip = require("../database/models/tripModel.js");
-const { default: mongoose } = require("mongoose");
-const {
+import {
   addStudent,
   getAllStudents,
   getStudentID,
   updateStudentLocalization,
   updateStudentDeviceId,
-} = require("../controllers/studentController.js");
-const { addTeacher } = require("../controllers/teacherController.js");
+  loginStudentEmail,
+  loginStudentCode,
+} from "../controllers/studentController.js";
+import {
+  addTeacher,
+  getTeacherId,
+  updateTeacherLocalization,
+  updateTeacherDeviceId,
+  loginTeacherCode,
+  loginTeacherEmail,
+} from "../controllers/teacherController.js";
 
-//Post Method
+//Student
 router.route("/addStudent").post(addStudent);
 
 router.get("/getAllStudents", getAllStudents);
@@ -26,5 +30,14 @@ router.post("/addTeacher", addTeacher);
 router.patch("/updateStudentLocalization/:id", updateStudentLocalization);
 
 router.patch("/updateStudentDeviceId/:id", updateStudentDeviceId);
+router.post("/loginStudentEmail/", loginStudentEmail);
+router.post("/loginStudentCode/", loginStudentCode);
 
-module.exports = router;
+//Teacher
+
+router.get("/getTeacher/:id", getTeacherId);
+router.patch("/updateTeacherLocalization/:id", updateTeacherLocalization);
+router.patch("/updateTeacherDeviceId/:id", updateTeacherDeviceId);
+router.post("/loginTeacherEmail/", loginTeacherEmail);
+router.post("/loginTeacherCode/", loginTeacherCode);
+export default router;

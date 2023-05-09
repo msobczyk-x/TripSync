@@ -1,6 +1,4 @@
-const Student = require('../database/models/studentModel');
-
-
+import Student from '../models/studentModel.js';
 async function addStudent(req,res) {
     console.log(req.body);
     const { id, first_name, last_name, phone_number, teacher_id } = req.body;
@@ -66,10 +64,32 @@ async function updateStudentDeviceId(req,res) {
       }
     }
 
-module.exports = {
+async function loginStudentEmail(req,res) {
+    try {
+        const student = await Student.findOne({ email: req.params.email });
+        res.json(student.code);
+        } catch (err) {
+        res.status(500).json({ message: err.message });
+        }
+    };
+
+async function loginStudentCode(req,res) {
+    try {
+        const student = await Student.findOne({ code: req.params.code });
+        res.json(student);
+        } catch (err) {
+        res.status(500).json({ message: err.message });
+        }
+    };
+
+
+
+export {
     addStudent,
     getAllStudents,
     getStudentID,
     updateStudentLocalization,
-    updateStudentDeviceId
-}; 
+    updateStudentDeviceId,
+    loginStudentEmail,
+    loginStudentCode,
+}

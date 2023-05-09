@@ -1,26 +1,56 @@
+import mongoose from "mongoose";
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import routes from "./routes/routes.js";
+import AdminJs from "adminjs";
+import AdminJSExpress from "@adminjs/express";
+import * as AdminJSMongoose from "@adminjs/mongoose";
+import Student from "./models/studentModel.js";
+import Teacher from "./models/teacherModel.js";
+import SchoolTrip from "./models/tripModel.js";
 
-const mongoose = require('mongoose');
-require('dotenv').config();
-const express = require('express');
-const routes = require('./routes/routes');
-const app = express();
-const cors = require('cors');
+AdminJs.registerAdapter(
+    {
+        Resource: AdminJSMongoose.Resource,
+        Database: AdminJSMongoose.Database,
+    }
+);
 
-app.use(cors());
+const start = async () => {
+  dotenv.config();
+  const app = express();
 
-const mongoString = process.env.DATABASE_URL;
-app.use(express.json());
-app.use('/api', routes);
+  app.use(cors());
 
+  const mongoString = process.env.DATABASE_URL;
+  app.use(express.json());
+  app.use("/api", routes);
 
-const PORT = process.env.PORT || 5000;
+  const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+ 
 
-mongoose.connect(mongoString);
-const db = mongoose.connection;
+  mongoose.connect(mongoString);
+  const db = mongoose.connection;
 
-db.on('error', (error) => console.error(error));
+  db.on("error", (error) => console.error(error));
 
-db.once('connected', () => console.log('Connected to Database'));
+  db.once("connected", () => console.log("Connected to Database"));
+
+  const admin = new AdminJs({
+    resources: [Student, Teacher, SchoolTrip],
+
+  });
+const adminRouter = AdminJSExpress.buildRouter(admin);
+app.use(admin.options.rootPath, adminRouter);
+  
+
+app.listen(PORT, () => {
+    console.log(`AdminJS started on http://localhost:${PORT}${admin.options.rootPath}`)
+  })
+};
+
+start();
+
 //TripSync

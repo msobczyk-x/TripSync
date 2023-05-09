@@ -1,6 +1,4 @@
-const mongoose = require('mongoose');
-
-
+import mongoose from 'mongoose';
 
 
 const schoolTripSchema = new mongoose.Schema({
@@ -9,13 +7,13 @@ const schoolTripSchema = new mongoose.Schema({
         required: true
     },
     teacher_id: {
-        type: Number,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Teacher',
         required: true
     },
-    students_id: {
-        type: Array,
-        required: true
-    },
+    students_id: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Student'
+    }],
     start_date:{
         type: Date,
         required: true
@@ -46,4 +44,4 @@ const schoolTripSchema = new mongoose.Schema({
     },
     });
 
-module.exports = mongoose.model('SchoolTrip', schoolTripSchema);
+export default mongoose.model('SchoolTrip', schoolTripSchema);

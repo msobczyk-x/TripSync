@@ -1,6 +1,5 @@
 
-const Teacher = require("../database/models/teacherModel.js");
-
+import Teacher from '../models/teacherModel.js';
 async function addTeacher(req, res) {
     const teacher = new Teacher({
         id: req.body.id,
@@ -19,8 +18,68 @@ async function addTeacher(req, res) {
       }
     }
 
+async function getTeacherId(req,res) {
+    try {
+        const teacher = await Teacher.findOne({ id: req.params.id });
+        res.json(teacher);
+        } catch (err) {
+        res.status(500).json({ message: err.message });
+        }
+    }
 
-module.exports = {
-    addTeacher,
+async function updateTeacherLocalization(req,res) {
 
-};
+    if (req.body.location != null) {
+        res.teacher.location = req.body.location;
+      }
+      try {
+        const result = await Teacher.findByIdAndUpdate(req.params.id, {
+          location: req.body.location,
+        });
+        
+        res.json(result);
+      } catch (err) {
+        res.status(400).json({ message: err.message });
+      }
+    }
+
+
+async function updateTeacherDeviceId(req,res) {
+    if (req.body.device_id != null) {
+        res.teacher.device_id = req.body.device_id;
+      }
+      try {
+        const result = await Teacher.findByIdAndUpdate(req.params.id, {
+          device_id: req.body.device_id,
+        });
+        res.json(result);
+      } catch (err) {
+        res.status(400).json({ message: err.message });
+      }
+    }
+
+async function loginTeacherEmail (req, res) {
+    try {
+        const teacher = await Teacher.findOne({ email: req.params.email });
+        res.json(teacher);
+        } catch (err) {
+        res.status(500).json({ message: err.message });
+        }
+}
+
+async function loginTeacherCode (req, res) {
+    try {
+        const teacher = await Teacher.findOne({ code: req.params.code });
+        res.json(teacher);
+        } catch (err) {
+        res.status(500).json({ message: err.message });
+        }
+}
+
+export { addTeacher,
+    getTeacherId,
+    updateTeacherLocalization,
+    updateTeacherDeviceId,
+    loginTeacherEmail,
+    loginTeacherCode
+  };
