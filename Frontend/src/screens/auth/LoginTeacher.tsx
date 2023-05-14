@@ -1,15 +1,16 @@
 
-import { View, Text } from 'react-native'
-import {Button, Input} from 'native-base'
+import { View } from 'react-native'
+import {Button, Input, Box, VStack, Text, Icon} from 'native-base'
 import React from 'react'
 import { AuthContext, useAuth } from '../../providers/AuthProvider'
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
+
 const LoginTeacher = ({navigation}:any) => {
   const [error, setError] = React.useState('');
   const [email, setEmail] = React.useState('');
   const handleLogin = () => {
-    axios.post('http://10.0.2.2:5000/api/loginTeacherEmail', {
+    axios.post('http://192.168.1.24:5000/api/loginTeacherEmail', {
       email: email.trim()
   }).then((response) => {
       if (response.status == 400) {
@@ -32,19 +33,24 @@ const LoginTeacher = ({navigation}:any) => {
 
     const {login} = useAuth()
   return (
-    <View>
-      <Text>LoginTeacher</Text>
-      <Input placeholder="Email" onChangeText={setEmail} value={email} />
+    <Box flex="1" safeAreaTop>
+      <VStack space={4} w="100%" px="10">
+        <Text fontSize={30} >Enter your email that you use for school authentiaction</Text>
+      <Input placeholder="Email" onChangeText={setEmail} value={email} size={"xl"} 
+      variant={"underlined"} 
+      />
       <Button onPress={() => {
             handleLogin()
       }} >
-        <Text>Login Teacher</Text>
+        Next
         </Button>
         {
           error ? <Text>{error}</Text> : null
         }
-    </View>
+    </VStack>
+    </Box>
   )
+  
 }
 
 export default LoginTeacher

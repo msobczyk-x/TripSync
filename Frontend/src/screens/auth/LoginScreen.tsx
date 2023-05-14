@@ -1,33 +1,47 @@
-import { View, Text } from 'react-native'
+import { View, Text, Image } from 'react-native'
 import React from 'react'
-import { Button, Flex, Spacer } from 'native-base'
+import { Button, Container, Flex, Spacer, Box, VStack, Center, HStack } from 'native-base'
 import { useNavigation } from '@react-navigation/native'
 
 const LoginScreen = ({navigation}:any) => {
    
   return (
-    <View style={{flex: 1, justifyContent:"center", alignItems: "center", gap: 50}}>
-      <Text>LoginScreen</Text>
-      <Flex flexDirection="row" >
+    <Box flex="1" safeAreaTop>
+      <VStack space={4} w="100%" px="10">
 
+     
+      <Image source={require('../../../assets/Logo.png')} style={{width:300, height:300, alignSelf:"center"}} />
+      <Text style={{fontSize:30, alignSelf:"center", fontWeight:"bold"}}>Login as</Text>
+      <Spacer/>
+      <HStack space={16} w="100%" alignItems="center" justifyContent="center">
+      <Button onPress={(e)=> {
+        e.preventDefault()
+        navigation.navigate("LoginStudent")
+
+      }} bg={'blue.400'} size="lg"
+      minW={150}
+      maxW={150}>
+        
+        Student
+      </Button>
     
       <Button onPress={(e)=> {
         e.preventDefault()
         navigation.navigate("LoginTeacher")
 
-      }}>
-        <Text>Go to Register as Teacher</Text>
+      }}
+      bg={'blue.600'}
+      size="lg"
+      maxW={150}
+      minW={150}
+      >
+  Teacher
       </Button>
-      <Spacer/>
-      <Button onPress={(e)=> {
-        e.preventDefault()
-        navigation.navigate("LoginStudent")
 
-      }}>
-        <Text>Go to Register as Student</Text>
-      </Button>
-      </Flex>
-    </View>
+
+      </HStack>
+      </VStack>
+    </Box>
   )
 }
 

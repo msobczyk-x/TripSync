@@ -4,7 +4,8 @@ import axios from 'axios';
 const initialState = {
     user: null,
     isAuthenticated: false,
-    role: ''
+    role: '',
+    trip: null
     // Add more properties if needed
   };
 
@@ -23,6 +24,12 @@ const initialState = {
           user: null,
           role: '',
           isAuthenticated: false,
+          trip: null
+        };
+      case 'SET_TRIP':
+        return {
+          ...state,
+          trip: action.payload.trip
         };
       // Add more cases for other actions if needed
       default:
@@ -42,6 +49,7 @@ export const useAuth = () => {
     SecureStore.setItemAsync('user', JSON.stringify(user));
     SecureStore.setItemAsync('isAuthenticated', JSON.stringify(true));
     SecureStore.setItemAsync('role', JSON.stringify(role));
+
   };
 
   const logout = () => {
@@ -50,6 +58,12 @@ export const useAuth = () => {
     SecureStore.deleteItemAsync('isAuthenticated');
     SecureStore.deleteItemAsync('role');
     SecureStore.deleteItemAsync('userEmail');
+    SecureStore.deleteItemAsync('trip');
+  };
+
+  const setTrip = (trip: any) => {
+    dispatch({ type: 'SET_TRIP', payload: {trip} });
+    SecureStore.setItemAsync('trip', JSON.stringify(trip));
   };
 
   // Add more methods if needed
@@ -58,6 +72,7 @@ export const useAuth = () => {
     state,
     login,
     logout,
+    setTrip
     // Return additional methods as needed
   };
 };

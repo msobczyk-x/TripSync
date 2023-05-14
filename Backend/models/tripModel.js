@@ -1,8 +1,10 @@
 import mongoose from 'mongoose';
 import {customAlphabet, nanoid} from 'nanoid';
+import {studentSchema} from './studentModel.js';
+import {teacherSchema} from './teacherModel.js';
 const nano = customAlphabet('1234567890', 6);
 
-const schoolTripSchema = new mongoose.Schema({
+export const schoolTripSchema = new mongoose.Schema({
   
     teacher_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -16,10 +18,7 @@ const schoolTripSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    code: {
-        type: Number,
-        required: false
-    },
+
     trip_status:{
         type: String,
         required: true,
@@ -48,7 +47,10 @@ const schoolTripSchema = new mongoose.Schema({
         required: true,
         maxLength: 500
     },
-
+    code: {
+        type: Number,
+        required: false 
+    },
 
     });
 
@@ -65,7 +67,23 @@ const schoolTripSchema = new mongoose.Schema({
                 break;
             }
         } while (true);
-    
-      });
+        
+        const Student = mongoose.model('Student', studentSchema);
 
+        for (let i = 0; i < this.students_id.length; i++) {
+          const student = await Student.findById(this.students_id[i]);
+          student.trips.push(this._id);
+          await student.save();
+        }
+
+        const Teacher = mongoose.model('Teacher', teacherSchema);
+
+const teacher = await Teacher.findById(this.teacher_id);
+teacher.trips.push(this._id);
+  await teacher.save();
+}
+    );
+
+
+ 
 export default mongoose.model('SchoolTrip', schoolTripSchema);

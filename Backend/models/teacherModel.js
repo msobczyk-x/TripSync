@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 import {customAlphabet, nanoid} from 'nanoid';
 const nano = customAlphabet('1234567890', 6);
 
-const teacherSchema = new mongoose.Schema({
+export const teacherSchema = new mongoose.Schema({
 
     email: {
         type: String,
@@ -55,6 +55,10 @@ const teacherSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    trips: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'SchoolTrip'
+    }]
     
 });
 

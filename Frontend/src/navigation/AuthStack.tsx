@@ -13,10 +13,10 @@ const Auth = () => {
       <AuthStack.Screen name="Login" component={LoginScreen} options={{
         headerShown: false
       }} />
-      <AuthStack.Screen name="LoginTeacher" component={LoginTeacher} />
-      <AuthStack.Screen name="LoginStudent" component={LoginStudent} />
-      <AuthStack.Screen name="LoginStudentCode" component={LoginStudentCode} />
-      <AuthStack.Screen name="LoginTeacherCode" component={LoginTeacherCode} />
+      <AuthStack.Screen name="LoginTeacher" options={{title:"Login as Teacher"}} component={LoginTeacher} />
+      <AuthStack.Screen name="LoginStudent" options={{title:"Login as Student"}} component={LoginStudent} />
+      <AuthStack.Screen name="LoginStudentCode" options={{title:"Verification code"}} component={LoginStudentCode} />
+      <AuthStack.Screen name="LoginTeacherCode" options={{title:"Verification code"}} component={LoginTeacherCode} />
     </AuthStack.Navigator>
   )
 }

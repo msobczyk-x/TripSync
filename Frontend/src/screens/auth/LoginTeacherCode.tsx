@@ -1,6 +1,6 @@
-import { View, Text } from 'react-native'
+import { View} from 'react-native'
 import React, {useState} from 'react'
-import { Button, HStack, Input } from 'native-base'
+import { Button, HStack, Input, Box, VStack, Flex, Text } from 'native-base'
 import {
     CodeField,
     Cursor,
@@ -10,17 +10,18 @@ import {
 import axios from 'axios';
 import { useAuth } from '../../providers/AuthProvider';
 import { StyleSheet } from 'react-native';
+
 const styles = StyleSheet.create({
     root: {flex: 1, padding: 20},
     title: {textAlign: 'center', fontSize: 30},
-    codeFieldRoot: {marginTop: 20},
+    codeFieldRoot: {marginTop: 20, gap:5},
     cell: {
       width: 40,
       height: 40,
       lineHeight: 38,
       fontSize: 24,
       borderWidth: 2,
-      borderColor: '#00000030',
+      borderColor: '#323031',
       textAlign: 'center',
     },
     focusCell: {
@@ -41,7 +42,7 @@ const LoginTeacherCode = ({navigation}:any) => {
     });
     const submit = () => {
         console.log
-        axios.post("http://10.0.2.2:5000/api/loginTeacherCode", {
+        axios.post("http://192.168.1.24:5000/api/loginTeacherCode", {
             code: value
         }).then((res) => {
             if (res.status === 400) {
@@ -49,7 +50,7 @@ const LoginTeacherCode = ({navigation}:any) => {
             }
             else if(res.status === 200)
             {
-              login(res.data, "teacher");
+              login(res.data, "Teacher");
             }
                 
               
@@ -60,16 +61,14 @@ const LoginTeacherCode = ({navigation}:any) => {
         )
     }
   return (
-    <View style={
-        {flex: 1,
-        justifyContent:"center",
-        alignItems: "center",
-        gap: 10
-        }
-    }>
-      <Text>LoginTeacherCode</Text>
-      <Text>Enter Code</Text>
-      <Text style={styles.title}>Verification</Text>
+    <Box flex="1" safeAreaTop>
+      <VStack space={4} w={"100%"}>
+      <Text fontSize={25} textAlign={"center"}>Enter the code sent to your email</Text>
+
+      <Text fontSize={25} fontWeight={"bold"} textAlign={"center"}>Verification code</Text>
+      <Flex w={"100%"} alignItems={"center"}>
+      {error && <Text color={"red.600"} fontSize={30} fontWeight={900}>{error}</Text>}
+     
       <CodeField
         ref={ref}
         {...props}
@@ -89,17 +88,23 @@ const LoginTeacherCode = ({navigation}:any) => {
           </Text>
         )}
       />
+       </Flex>
+    
     <Button onPress={(e)=> {
         e.preventDefault()
         submit()
     
-    }}>
+    }} mt={24}   bg={'blue.600'}
+    size="lg"
+    maxW={150}
+    minW={150} alignSelf={"center"}>
 
 
-        <Text>Submit</Text>
+       Submit
     </Button>
-      {error && <Text>{error}</Text>}
-    </View>
+    </VStack>
+     
+    </Box>
   )
 }
 

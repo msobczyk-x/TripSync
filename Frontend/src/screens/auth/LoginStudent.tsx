@@ -1,6 +1,6 @@
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import React, {useState} from 'react'
-import { Button, Input } from 'native-base'
+import { Button, Input, Box, VStack, Text } from 'native-base'
 import { AuthContext, useAuth } from '../../providers/AuthProvider'
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
@@ -32,19 +32,20 @@ const LoginStudent = ({navigation}:any) => {
     const {login} = useAuth()
 
   return (
-    <View>
-      <Text>LoginStudent</Text>
-      <Input placeholder="Email" onChangeText={setEmail} value={email} />
+    <Box flex="1" safeAreaTop>
+      <VStack space={4} w="100%" px="10">
+        <Text fontSize={30} >Enter your email that you use for school authentiaction</Text>
+      <Input placeholder="Email" onChangeText={setEmail} value={email} size={"xl"} variant={"underlined"} />
       <Button onPress={() => {
             handleLogin()
       }} >
-        <Text>LoginStudent</Text>
+        Next
         </Button>
         {
           error ? <Text>{error}</Text> : null
         }
-     
-    </View>
+    </VStack>
+    </Box>
   )
 }
 

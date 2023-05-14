@@ -18,6 +18,11 @@ import {
   loginTeacherEmail,
 } from "../controllers/teacherController.js";
 
+import { getTrip,
+  getTripStudent,
+  getTripInProgressTeacher
+} from "../controllers/tripController.js";
+
 //Student
 router.route("/addStudent").post(addStudent);
 
@@ -40,4 +45,11 @@ router.patch("/updateTeacherLocalization/:id", updateTeacherLocalization);
 router.patch("/updateTeacherDeviceId/:id", updateTeacherDeviceId);
 router.post("/loginTeacherEmail/", loginTeacherEmail);
 router.post("/loginTeacherCode/", loginTeacherCode);
+
+//Trip
+router.get("/getTrip/:id", getTrip);
+router.get("/getTripStudent/:id", getTripStudent);
+router.get("/getTripInProgressTeacher/:id", getTripInProgressTeacher);
+
+
 export default router;

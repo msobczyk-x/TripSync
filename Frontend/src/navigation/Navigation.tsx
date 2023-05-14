@@ -1,12 +1,14 @@
 import React, { useEffect } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import Auth from './AuthStack'
-import App from './AppStack'
+import AppTeacher from './AppTeacherStack'
 import LoadingScreen from '../screens/LoadingScreen'
 import AuthProvider from '../providers/AuthProvider'
 import { useAuth } from '../providers/AuthProvider'
 import { Text } from 'react-native'
 import * as SecureStore from 'expo-secure-store';
+import AppStudent from './AppStudentStack'
+
 const Navigation = () => {
   const [isLoading, setIsLoading] = React.useState(true);
   const {state} = useAuth();
@@ -35,16 +37,24 @@ useEffect(() => {
         }
       })
     }
+    SecureStore.getItemAsync('trip').then((value) => {
+      if(value == null){
+        state.trip = null;
+      }else{
+        state.trip = JSON.parse(value);
+      }
+    }
+    )
   })
  
-  console.log(state)
+
 }, [state])
 
   return (
     <NavigationContainer>
-   
+
         {isLoading == true ? <LoadingScreen /> :
-        state.isAuthenticated == true ? <App /> : <Auth />
+        state.isAuthenticated == true ? state.role == 'Student' ? <AppStudent/> : <AppTeacher/> : <Auth />
         
       }
     </NavigationContainer>
