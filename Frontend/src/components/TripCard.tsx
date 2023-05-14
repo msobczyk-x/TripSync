@@ -1,7 +1,7 @@
 
 import React from 'react'
-import { Box, Heading, Text, Pressable, Flex, Progress } from 'native-base'
-
+import { Box, Heading, Text, Pressable, Flex, Progress, VStack, HStack } from 'native-base'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 const TripCard = ({navigation, trip}:any) => {
     const [progress, setProgress] = React.useState(0)
     const calculateProgress = () => {
@@ -37,21 +37,37 @@ const TripCard = ({navigation, trip}:any) => {
       shadow={5}
       p={5}
       
-      justifyContent={"space-between"}
+
       >
         <Heading>Trip</Heading>
         
           {
-              trip === null ? <Heading size={"sm"} color={"white"} >No current trip</Heading> :
-              <Box>
-              <Heading size={"sm"} color={"white"} >{trip.trip_name} </Heading>
-              <Flex direction="column" justifyContent="space-between">
+              trip === null ? <Heading size={"md"} color={"white"} >No current trip</Heading> :
+              <Flex direction='column' justifyContent={"space-between"} h={"85%"}>
+              <Heading size={"md"} color={"white"} mt={4} >{trip.trip_name} </Heading>
+             <HStack>
+              
+                
+             
+              <Flex w={"100%"} alignItems={"center"} justifyContent={"space-between"} direction='row' >
+              <Text color={"white"}>{trip.start_location}</Text>
+          
+
+    <MaterialCommunityIcons name="navigation" size={24} color="white" style={{
+                transform: [{ rotate: `90deg` }]
+              }} />
+           
+              <Text color={"white"}>{trip.end_location}</Text>
+              </Flex>
+      
+             </HStack>
+              <Flex direction="column">
         <Text fontSize={15} fontWeight={700} pb="2" >Current trip progress:</Text>
           <Progress value={progress*100} w="100%" colorScheme={"emerald"} />
 
 
         </Flex>
-        </Box>
+        </Flex>
           }
 
   

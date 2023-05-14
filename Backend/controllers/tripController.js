@@ -20,7 +20,7 @@ async function getTripStudent(req, res) {
         trip_status: 'in_progress',
         students_id: { $in: [req.params.id] }
       });
-      console.log(trip);
+
 
     if (trip) {
         res.json(trip);

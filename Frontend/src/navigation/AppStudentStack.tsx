@@ -43,9 +43,9 @@ const AppStudent = () => {
 
   useEffect(() => {
     SecureStore.getItemAsync('trip').then((value) => {
-      console.log(`ssTrip:${value}`)
+ 
       if(!value){
-        console.log(`userid: ${state.user._id}`)
+
     axios.get(`http://192.168.1.24:5000/api/getTripStudent/${state.user._id}`).then((res) => {
 
       if(res.data)
