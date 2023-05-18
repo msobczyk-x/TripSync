@@ -55,14 +55,14 @@ const TripCard = ({navigation, trip}:any) => {
                 
              
               <Flex w={"100%"} alignItems={"center"} justifyContent={"space-between"} direction='row' >
-              <Text color={"white"}>{trip.start_location}</Text>
+              <Text color={"white"} fontSize={18}>{trip.start_location}</Text>
           
 
     <MaterialCommunityIcons name="navigation" size={24} color="white" style={{
                 transform: [{ rotate: `90deg` }]
               }} />
            
-              <Text color={"white"}>{trip.end_location}</Text>
+              <Text color={"white"} fontSize={18}>{trip.end_location}</Text>
               </Flex>
       
              </HStack>
