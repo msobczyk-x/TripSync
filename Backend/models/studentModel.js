@@ -56,7 +56,18 @@ export const studentSchema = new mongoose.Schema({
     trips: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'SchoolTrip'
-    }]
+    }],
+    parent_phone_number:{
+        type: String,
+        required: true,
+        maxDigits: 9,
+        validate: {
+            validator: function(v) {
+                return /\d{3}\d{3}\d{3}/.test(v);
+                }
+        }
+    },
+    
 
 });
 

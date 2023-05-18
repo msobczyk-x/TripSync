@@ -12,6 +12,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import axios from 'axios';
 import LoadingScreen from '../screens/LoadingScreen';
 import * as SecureStore from 'expo-secure-store';
+import { color } from 'native-base/lib/typescript/theme/styled-system';
 const Tab = createBottomTabNavigator();
 
 const AppStudent = () => {
@@ -84,7 +85,38 @@ const AppStudent = () => {
 
   return (
 
-<Tab.Navigator>
+<Tab.Navigator screenOptions={{
+  headerShown: false,
+  tabBarStyle:{
+    
+    borderTopColor: 'transparent',
+    borderTopWidth: 0,
+
+
+    height: 60,
+    paddingBottom: 5,
+    paddingTop: 5,
+
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 10,
+    shadowOffset: {
+      width: 0,
+      height: 24,
+  },
+  shadowOpacity: 0.58,
+  shadowRadius: 16.0,
+  elevation: 32,
+  borderTopLeftRadius: 21,
+  borderTopRightRadius: 21,
+  backgroundColor: "#000025",
+  
+  
+}
+
+}}>
 <Tab.Screen name="Home" component={HomeScreen} 
         options={{
           headerShown: false,

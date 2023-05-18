@@ -1,6 +1,7 @@
-import {Box, Button, Heading, Image} from 'native-base'
+import {Box, Button, Heading, Image, Flex, HStack} from 'native-base'
 import React from 'react'
 import { useAuth } from '../../providers/AuthProvider'
+import { position } from 'native-base/lib/typescript/theme/styled-system'
 const ProfileScreen = () => {
 
   const {state,logout} = useAuth()
@@ -14,6 +15,34 @@ const ProfileScreen = () => {
       }} mt={5}>
         Logout
       </Button>
+
+      <Flex mt={20} style={{
+        gap: 24,
+        position: "absolute",
+        bottom: 128,
+        alignItems: "center",
+        justifyContent: "center",
+      }}>
+      <Heading >
+        Are you lost ?
+        </Heading> 
+        <HStack space={4}>
+        <Button onPress={() => {
+        }}
+        bg={"danger.600"}
+        >
+          Call your teacher
+        </Button>
+        <Button onPress={() => {
+        }}
+        bg={"danger.600"}
+        >
+          Alert your teacher
+        </Button>
+        </HStack>
+       
+        
+      </Flex>
     </Box>
 
   )

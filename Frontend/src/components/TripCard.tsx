@@ -34,16 +34,21 @@ const TripCard = ({navigation, trip}:any) => {
       rounded={10}
       minH={200}
       maxH={250}
-      shadow={5}
+
       p={5}
       
 
       >
+        <VStack>
+
+        
         <Heading>Trip</Heading>
         
           {
               trip === null ? <Heading size={"md"} color={"white"} >No current trip</Heading> :
-              <Flex direction='column' justifyContent={"space-between"} h={"85%"}>
+              <Flex direction='column' h={"85%"} style={{
+                gap: 24
+              }}>
               <Heading size={"md"} color={"white"} mt={4} >{trip.trip_name} </Heading>
              <HStack>
               
@@ -61,7 +66,7 @@ const TripCard = ({navigation, trip}:any) => {
               </Flex>
       
              </HStack>
-              <Flex direction="column">
+              <Flex direction="column" position={"absolute"} bottom={0} width={"100%"}>
         <Text fontSize={15} fontWeight={700} pb="2" >Current trip progress:</Text>
           <Progress value={progress*100} w="100%" colorScheme={"emerald"} />
 
@@ -71,8 +76,7 @@ const TripCard = ({navigation, trip}:any) => {
           }
 
   
-        
-       
+</VStack>
       </Pressable>
   )
 }

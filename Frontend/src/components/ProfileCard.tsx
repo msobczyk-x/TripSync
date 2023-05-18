@@ -12,7 +12,7 @@ const ProfileCard = ({navigation, state}:any) => {
     rounded={10}
     minH={150}
     maxH={200}
-    shadow={5}
+
     p={5}
     justifyContent={"space-between"}
   >

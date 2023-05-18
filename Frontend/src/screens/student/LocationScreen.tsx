@@ -48,7 +48,10 @@ const LocationScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
+    
+    <View style={styles.container}
+   
+    >
       {loading ? (
         <Text>Loading...</Text>
       ) : (

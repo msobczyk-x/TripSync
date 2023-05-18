@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "aaa",
-    "slug": "aaa",
+    "name": "TripSync",
+    "slug": "TripSync",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

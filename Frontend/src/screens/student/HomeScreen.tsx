@@ -15,10 +15,24 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import TripCard from "../../components/TripCard";
 import ProfileCard from "../../components/ProfileCard";
 import MapCard from "../../components/MapCard";
+import { RefreshControl } from "react-native";
 const HomeScreen = ({ navigation }: any) => {
   const { state } = useAuth();
   return (
-    <ScrollView>
+    
+    <ScrollView
+    contentContainerStyle={{flexGrow:1}}
+    refreshControl={
+      <RefreshControl
+            refreshing={false}
+            onRefresh={() => {
+              navigation.navigate('Home');
+            }}
+            style={{ flexGrow: 1 }}
+          />
+    }
+    
+    >
       <VStack
         space={10}
         bg="white"

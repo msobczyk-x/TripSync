@@ -51,6 +51,16 @@ export const schoolTripSchema = new mongoose.Schema({
         type: Number,
         required: false 
     },
+    trip_schedule: [{
+        date: {
+            type: Date,
+            required: true
+        },
+        name: {
+            type: String,
+            required: true
+        }
+    }],
 
     });
 
