@@ -16,6 +16,7 @@ import {
   updateTeacherDeviceId,
   loginTeacherCode,
   loginTeacherEmail,
+  getTeacherPhoneNumber,
 } from "../controllers/teacherController.js";
 
 import { getTrip,
@@ -41,6 +42,7 @@ router.post("/loginStudentCode", loginStudentCode);
 //Teacher
 
 router.get("/getTeacher/:id", getTeacherId);
+router.get("/getTeacherPhoneNumber/:id", getTeacherPhoneNumber);
 router.patch("/updateTeacherLocalization/:id", updateTeacherLocalization);
 router.patch("/updateTeacherDeviceId/:id", updateTeacherDeviceId);
 router.post("/loginTeacherEmail/", loginTeacherEmail);

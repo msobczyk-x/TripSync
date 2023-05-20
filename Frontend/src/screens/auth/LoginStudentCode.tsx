@@ -41,7 +41,7 @@ const LoginStudentCode = ({navigation}:any) => {
     });
     const submit = () => {
         console.log
-        axios.post("http://10.0.2.2:5000/api/loginStudentCode", {
+        axios.post("http://172.20.10.2:3000/api/loginStudentCode", {
             code: value
         }).then((res) => {
             if (res.status === 400) {

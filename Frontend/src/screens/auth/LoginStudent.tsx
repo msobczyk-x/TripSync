@@ -9,7 +9,7 @@ const LoginStudent = ({navigation}:any) => {
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const handleLogin = () => {
-    axios.post('http://10.0.2.2:5000/api/loginStudentEmail', {
+    axios.post('http://172.20.10.2:3000/api/loginStudentEmail', {
       email: email.trim()
   }).then((response) => {
       if (response.status == 400) {

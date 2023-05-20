@@ -42,7 +42,7 @@ const LoginTeacherCode = ({navigation}:any) => {
     });
     const submit = () => {
         console.log
-        axios.post("http://192.168.1.24:5000/api/loginTeacherCode", {
+        axios.post("http://172.20.10.2:3000/api/loginTeacherCode", {
             code: value
         }).then((res) => {
             if (res.status === 400) {

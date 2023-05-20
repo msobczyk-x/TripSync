@@ -5,7 +5,8 @@ const initialState = {
     user: null,
     isAuthenticated: false,
     role: '',
-    trip: null
+    trip: null,
+    teacherPhoneNumber: null,
     // Add more properties if needed
   };
 
@@ -30,6 +31,11 @@ const initialState = {
         return {
           ...state,
           trip: action.payload.trip
+        };
+      case 'SET_TEACHER_PHONE_NUMBER':
+        return {
+          ...state,
+          teacherPhoneNumber: action.payload.teacherPhoneNumber
         };
       // Add more cases for other actions if needed
       default:
@@ -66,13 +72,17 @@ export const useAuth = () => {
     SecureStore.setItemAsync('trip', JSON.stringify(trip));
   };
 
+  const setTeacherPhoneNumber = (teacherPhoneNumber: any) => {
+    dispatch({ type: 'SET_TEACHER_PHONE_NUMBER', payload: {teacherPhoneNumber} });
+  }
   // Add more methods if needed
 
   return {
     state,
     login,
     logout,
-    setTrip
+    setTrip,
+    setTeacherPhoneNumber,
     // Return additional methods as needed
   };
 };

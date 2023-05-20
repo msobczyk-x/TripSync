@@ -6,6 +6,7 @@ import {
   Flex,
   Button,
   ScrollView,
+  Pressable
 } from "native-base";
 import React from "react";
 import { useAuth } from "../../providers/AuthProvider";
@@ -13,6 +14,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import {Spacer} from 'native-base';
 import { RefreshControl } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 const convertDate = (date: string) => {
   const d = new Date(date);
   const options:any = {
@@ -25,10 +27,14 @@ const convertDate = (date: string) => {
   return d.toLocaleString("en-GB", options);
 };
 const TripScreen = ({navigation}:any) => {
+  const insets = useSafeAreaInsets();
   const { state } = useAuth();
   return (
     <ScrollView 
-    contentContainerStyle={{flexGrow:1, marginTop:30}}
+    contentContainerStyle={{flexGrow:1
+
+    
+    }}
     refreshControl={
       <RefreshControl
             refreshing={false}
@@ -119,11 +125,32 @@ const TripScreen = ({navigation}:any) => {
                 )}
               </Flex>
             </Flex>
+            <Flex>
+              <Heading>
+                Tasks
+              </Heading>
+              <VStack>
+
+             
+              {state.trip.tasks ? (
+                state.trip.tasks.map((task:any)=> {
+                  <Pressable>
+                    <Text>
+                      {task.name}
+                    </Text>
+                  </Pressable>
+                }))
+
+                :
+                <Text>No tasks</Text>
+              }
+               </VStack>
+            </Flex>
             <Flex
               direction="row"
               alignItems={"center"}
               justifyContent={"space-between"}
-              style={{gap:10}}
+              style={{gap:2, minHeight: 300}}
             >
               <Heading>Photos</Heading>
               <Button>Add</Button>

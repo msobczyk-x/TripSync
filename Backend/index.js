@@ -29,7 +29,7 @@ const start = async () => {
   app.use(express.json());
   app.use("/api", routes);
 
-  const PORT = process.env.PORT || 5000;
+  const PORT = process.env.PORT || 3000;
 
  
 

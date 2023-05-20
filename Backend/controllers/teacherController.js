@@ -91,10 +91,28 @@ async function loginTeacherCode (req, res) {
         }
 }
 
+async function getTeacherPhoneNumber (req, res) {
+  try {
+    console.log(req.params.id)
+    const teacher = await Teacher.findOne({ _id: req.params.id }, 'phone_number');
+    if (teacher == null) {
+      return res.status(400).send('Invalid id');
+  }
+  else {
+    console.log(teacher)
+    res.json(teacher.phone_number)
+  }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+  
+}
+
 export { addTeacher,
     getTeacherId,
     updateTeacherLocalization,
     updateTeacherDeviceId,
     loginTeacherEmail,
-    loginTeacherCode
+    loginTeacherCode,
+    getTeacherPhoneNumber,
   };

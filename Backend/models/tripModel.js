@@ -61,6 +61,26 @@ export const schoolTripSchema = new mongoose.Schema({
             required: true
         }
     }],
+    tasks: [{
+        isDone:
+        {
+            type: Boolean,
+            required: true
+        },
+        name: {
+            type: String,
+            required: true
+        },
+        description: {
+            type: String,
+            required: false
+        },
+        reward: {
+            type: String,
+            required:false
+        }
+
+    }]
 
     });
 
