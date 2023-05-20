@@ -10,7 +10,7 @@ const LoginTeacher = ({navigation}:any) => {
   const [error, setError] = React.useState('');
   const [email, setEmail] = React.useState('');
   const handleLogin = () => {
-    axios.post('http://172.20.10.2:3000/api/loginTeacherEmail', {
+    axios.post('http://192.168.1.24:3000/api/loginTeacherEmail', {
       email: email.trim()
   }).then((response) => {
       if (response.status == 400) {

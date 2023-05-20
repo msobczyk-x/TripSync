@@ -46,7 +46,7 @@ const AppStudent = () => {
     SecureStore.getItemAsync("trip").then((value) => {
       if (!value) {
         axios
-          .get(`http://172.20.10.2:3000/api/getTripStudent/${state.user._id}`)
+          .get(`http://192.168.1.24:3000/api/getTripStudent/${state.user._id}`)
           .then((res) => {
             if (res.data) {
               if (res.data.message === "Trip not found") {
@@ -54,6 +54,7 @@ const AppStudent = () => {
                 setLoading(false);
                 setTripStatus("No trip in progress");
               } else {
+                console.log(res.data);
                 setTrip(res.data);
                 setLoading(false);
                 setTripStatus("In progress");
@@ -74,7 +75,7 @@ const AppStudent = () => {
 
   useEffect(() => {
     if (tripStatus === "In progress") {
-      axios.get(`http://172.20.10.2:3000/api/getTeacherPhoneNumber/${state.trip.teacher_id}`).then((res) => {
+      axios.get(`http://192.168.1.24:3000/api/getTeacherPhoneNumber/${state.trip.teacher_id}`).then((res) => {
         if (res.data) {
           if (res.data.message !== "Invalid id")
           {

@@ -33,7 +33,7 @@ router.get("/getStudent/:id", getStudentID);
 
 router.post("/addTeacher", addTeacher);
 
-router.patch("/updateStudentLocalization/:id", updateStudentLocalization);
+router.post("/updateStudentLocalization/:id", updateStudentLocalization);
 
 router.patch("/updateStudentDeviceId/:id", updateStudentDeviceId);
 router.post("/loginStudentEmail", loginStudentEmail);
@@ -43,7 +43,7 @@ router.post("/loginStudentCode", loginStudentCode);
 
 router.get("/getTeacher/:id", getTeacherId);
 router.get("/getTeacherPhoneNumber/:id", getTeacherPhoneNumber);
-router.patch("/updateTeacherLocalization/:id", updateTeacherLocalization);
+router.post("/updateTeacherLocalization/:id", updateTeacherLocalization);
 router.patch("/updateTeacherDeviceId/:id", updateTeacherDeviceId);
 router.post("/loginTeacherEmail/", loginTeacherEmail);
 router.post("/loginTeacherCode/", loginTeacherCode);

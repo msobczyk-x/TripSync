@@ -36,15 +36,15 @@ async function getStudentID(req,res) {
     };
 
 async function updateStudentLocalization(req,res) {
-    if (req.body.location != null) {
-        res.student.location = req.body.location;
-      }
-      try {
+  try {
+
+      
+        console.log(req.body.location)
         const result = await Student.findByIdAndUpdate(req.params.id, {
           location: req.body.location,
         });
     
-        res.json(result);
+        res.status(200).send("Location updated")
       } catch (err) {
         res.status(400).json({ message: err.message });
       }

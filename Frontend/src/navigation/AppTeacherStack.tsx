@@ -47,7 +47,7 @@ const AppTeacher = () => {
   
       if(!value){
  
-    axios.get(`http://172.20.10.2:3000/api/getTripInProgressTeacher/${state.user._id}`).then((res) => {
+    axios.get(`http://192.168.1.24:3000/api/getTripInProgressTeacher/${state.user._id}`).then((res) => {
 
       if(res.data)
       {

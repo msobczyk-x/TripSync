@@ -23,6 +23,7 @@ async function getTripStudent(req, res) {
 
 
     if (trip) {
+        console.log(trip)
         res.json(trip);
 
     }

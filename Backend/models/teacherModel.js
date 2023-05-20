@@ -52,8 +52,23 @@ export const teacherSchema = new mongoose.Schema({
         required: false
     },
     location: {
-        type: String,
-        required: false
+       
+        longitude: {
+            type: String,
+            required: false,
+            trim: true
+        },
+        latitude: {
+            type: String,
+            required: false,
+            trim: true
+        },
+        lastUpdate: {
+            type: Date,
+            required: false,
+            trim: true
+        }
+       
     },
     trips: [{
         type: mongoose.Schema.Types.ObjectId,
