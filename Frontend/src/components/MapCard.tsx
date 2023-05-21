@@ -89,6 +89,7 @@ const MapCard = ({navigation, state}:any) => {
           <Heading>Loading...</Heading>
         ) : (
           <MapView style={styles.map}
+          provider='google'
             showsUserLocation={true}
             followsUserLocation={true}
             userLocationPriority='high'

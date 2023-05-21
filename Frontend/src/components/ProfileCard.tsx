@@ -18,8 +18,12 @@ const ProfileCard = ({navigation, state}:any) => {
   >
     <Flex>
       <Heading color={"white"}>
-        Hi, {`${state.user.first_name} ${state.user.last_name}`} !{" "}
+        {state.user.first_name} 
       </Heading>
+      <Heading color={"white"}>
+        {state.user.last_name}
+      </Heading>
+      
       <Heading size={"sm"} color={"white"}>
         {state.user.school}
       </Heading>

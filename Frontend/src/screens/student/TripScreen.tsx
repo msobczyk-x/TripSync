@@ -174,7 +174,7 @@ const TripScreen = ({ navigation }: any) => {
                     <Modal.Body>
                       <Text>{selectedTask?.description}</Text>
                       <Spacer />
-                      <Text>Reward: {selectedTask?.reward}</Text>
+                      <Text fontWeight={"500"} fontSize={14}>Reward: {selectedTask?.reward}</Text>
                     </Modal.Body>
                   </Modal.Content>
                 </Modal>

@@ -17,7 +17,40 @@ import axios from 'axios';
 import * as BackgroundFetch from 'expo-background-fetch';
 
 
+const locationBackgroundTask = async () => {
+  const user = await SecureStore.getItemAsync('user').then((value) => {
+    if(value == null){
+      return null;
+    }else{
+      return JSON.parse(value);
+    }
+  })
+  
+  const { status } = await Location.requestForegroundPermissionsAsync();
+  if (status === 'granted') {
+    const location = await Location.getCurrentPositionAsync({});
+    const res = await axios.post('http://192.168.1.24:3000/api/updateStudentLocalization/'+ user._id , {
+      location: {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        lastUpdate: new Date()
+      }
+    })
+    console.log('Location (in background) changed to:', location);
+  }
+  else {
+    console.log('Location permission not granted!');
+  }
+}
 
+async function registerBackgroundTask() {
+  await BackgroundFetch.registerTaskAsync('locationBackgroundTask', {
+    minimumInterval: 60 * 15, // 15 minutes
+    stopOnTerminate: false, // android only,
+    startOnBoot: true, // android only
+  });
+}
+TaskManager.defineTask('locationBackgroundTask', locationBackgroundTask);
 
 const Navigation = () => {
   const [isLoading, setIsLoading] = React.useState(true);
@@ -62,36 +95,9 @@ useEffect(() => {
 
 }, [state])
 
-const locationBackgroundTask = async (taskData:any) => {
-  const { delay } = taskData;
-  
-  const { status } = await Location.requestForegroundPermissionsAsync();
-  if (status === 'granted') {
-    setLocationAllowed(true);
-  } else {
-    setLocationAllowed(false);
-  }
-  const location = await Location.getCurrentPositionAsync({});
-  const res = await axios.post('http://192.168.1.24:3000/api/updateStudentLocalization/'+ state.user._id, {
-    location: {
-      latitude: location.coords.latitude,
-      longitude: location.coords.longitude,
-      lastUpdate: new Date()
-    }
-  })
-  console.log('Location (in background) changed to:', location);
-};
 
 
-async function registerBackgroundTask() {
-  await BackgroundFetch.registerTaskAsync('locationBackgroundTask', {
-    minimumInterval: 60 * 15, // 15 minutes
-    stopOnTerminate: false, // android only,
-    startOnBoot: true, // android only
-  });
-}
 
-TaskManager.defineTask('locationBackgroundTask', locationBackgroundTask);
 
 useLocationChangeListener((coords: LatLng)=> {
   console.log('Location changed to:', coords);

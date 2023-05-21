@@ -19,9 +19,12 @@ import {
   getTeacherPhoneNumber,
 } from "../controllers/teacherController.js";
 
-import { getTrip,
+import {
+  getTrip,
   getTripStudent,
-  getTripInProgressTeacher
+  getTripInProgressTeacher,
+  getTripStudentsLocalization,
+  getTripTeacherLocalization,
 } from "../controllers/tripController.js";
 
 //Student
@@ -52,6 +55,7 @@ router.post("/loginTeacherCode/", loginTeacherCode);
 router.get("/getTrip/:id", getTrip);
 router.get("/getTripStudent/:id", getTripStudent);
 router.get("/getTripInProgressTeacher/:id", getTripInProgressTeacher);
-
+router.get("/getTripStudentsLocalization/:id", getTripStudentsLocalization);
+router.get("/getTripTeacherLocalization/:id", getTripTeacherLocalization);
 
 export default router;
