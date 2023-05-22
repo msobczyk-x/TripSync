@@ -37,7 +37,8 @@ import {
   getTripStudentsLocalization,
   getTripTeacherLocalization,
   uploadTripPhoto,
-  getTripPhotos
+  getTripPhotos,
+  getTripStudentsParentsPhoneNumbers,
 } from "../controllers/tripController.js";
 
 //Student
@@ -72,4 +73,5 @@ router.get("/getTripStudentsLocalization/:id", getTripStudentsLocalization);
 router.get("/getTripTeacherLocalization/:id", getTripTeacherLocalization);
 router.post("/uploadTripPhoto/:id/:author_id",upload.single('photo'), uploadTripPhoto);
 router.get("/getTripPhotos/:id", getTripPhotos);
+router.get("/getTripStudentsPhoneNumbers/:id", getTripStudentsParentsPhoneNumbers);
 export default router;

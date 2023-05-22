@@ -114,7 +114,7 @@ useLocationChangeListener((coords: LatLng)=> {
 
 useLocationChangeListener((coords: LatLng)=> {
   console.log('Location changed to:', coords);
-  const res = axios.post('http://192.168.1.24:3000/api/updateTeacherLocalization/'+ state.user._id, {
+  const res = axios.post(`http://192.168.1.24:3000/api/updateTeacherLocalization/${state.user._id}`, {
     location: {
       latitude: coords.latitude,
       longitude: coords.longitude,

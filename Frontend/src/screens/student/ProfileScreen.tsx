@@ -1,7 +1,6 @@
 import {Box, Button, Heading, Image, Flex, HStack} from 'native-base'
 import React from 'react'
 import { useAuth } from '../../providers/AuthProvider'
-import { position } from 'native-base/lib/typescript/theme/styled-system'
 import { Linking } from 'react-native'
 const ProfileScreen = () => {
 

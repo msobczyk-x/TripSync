@@ -19,19 +19,17 @@ import { RefreshControl } from "react-native";
 const HomeScreen = ({ navigation }: any) => {
   const { state } = useAuth();
   return (
-    
     <ScrollView
-    contentContainerStyle={{flexGrow:1}}
-    refreshControl={
-      <RefreshControl
-            refreshing={false}
-            onRefresh={() => {
-              navigation.navigate('Home');
-            }}
-            style={{ flexGrow: 1 }}
-          />
-    }
-    
+      contentContainerStyle={{ flexGrow: 1 }}
+      refreshControl={
+        <RefreshControl
+          refreshing={false}
+          onRefresh={() => {
+            navigation.navigate("Home");
+          }}
+          style={{ flexGrow: 1 }}
+        />
+      }
     >
       <VStack
         space={10}
@@ -49,7 +47,7 @@ const HomeScreen = ({ navigation }: any) => {
 
         <TripCard navigation={navigation} trip={state.trip} />
 
-        <MapCard state={state} navigation={navigation}/>
+        <MapCard state={state} navigation={navigation} />
       </VStack>
     </ScrollView>
   );

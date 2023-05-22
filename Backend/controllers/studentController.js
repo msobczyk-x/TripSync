@@ -48,6 +48,7 @@ async function updateStudentLocalization(req,res) {
       } catch (err) {
         res.status(400).json({ message: err.message });
       }
+  
     }
 
 async function updateStudentDeviceId(req,res) {

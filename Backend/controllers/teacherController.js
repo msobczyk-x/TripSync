@@ -28,20 +28,20 @@ async function getTeacherId(req,res) {
     }
 
 async function updateTeacherLocalization(req,res) {
+  try {
 
-    if (req.body.location != null) {
-        res.teacher.location = req.body.location;
-      }
-      try {
-        const result = await Teacher.findByIdAndUpdate(req.params.id, {
-          location: req.body.location,
-        });
-        
-        res.json(result);
-      } catch (err) {
-        res.status(400).json({ message: err.message });
-      }
-    }
+      
+    console.log(req.body.location)
+    const result = await Teacher.findByIdAndUpdate(req.params.id, {
+      location: req.body.location,
+    });
+
+    res.status(200).send("Location updated")
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+
+}
 
 
 async function updateTeacherDeviceId(req,res) {

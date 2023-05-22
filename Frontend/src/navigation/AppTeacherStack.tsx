@@ -87,8 +87,35 @@ const AppTeacher = () => {
 
 
   return (
+<Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          borderTopColor: "transparent",
+          borderTopWidth: 0,
 
-<Tab.Navigator>
+          height: 60,
+          paddingBottom: 5,
+          paddingTop: 5,
+
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 10,
+          shadowOffset: {
+            width: 0,
+            height: 24,
+          },
+          shadowOpacity: 0.58,
+          shadowRadius: 16.0,
+          elevation: 32,
+          borderTopLeftRadius: 21,
+          borderTopRightRadius: 21,
+          backgroundColor: "#000025",
+        },
+      }}
+    >
         <Tab.Screen name="Home" component={HomeScreen} 
         options={{
           headerShown: false,

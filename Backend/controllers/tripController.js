@@ -51,7 +51,7 @@ async function getTripStudentsLocalization(req, res) {
     const trip = await SchoolTrip.findOne({
         trip_status: 'in_progress',
         _id: { $in: [req.params.id] }
-        }).populate('Students');
+        }).populate('students_id');
 
         if (!trip) {
             res.status(404).json({message: "Trip not found"});
@@ -66,6 +66,35 @@ async function getTripStudentsLocalization(req, res) {
             }
         })
         res.json(students);
+}
+
+async function getTripStudentsParentsPhoneNumbers(req, res) {
+    try {
+
+    
+    const trip = await SchoolTrip.findOne({
+        trip_status: 'in_progress',
+        _id: { $in: [req.params.id] }
+        }).populate('students_id');
+
+        if (!trip) {
+            res.status(404).json({message: "Trip not found"});
+        }
+
+        const students = trip.students_id.map(student => {
+            return {
+                id: student._id,
+                first_name: student.first_name,
+                last_name: student.last_name,
+                phone_number: student.phone_number,
+                parent_phone_number: student.parent_phone_number
+            }
+        })
+        res.json(students);
+    }
+    catch (error) {
+        console.log(error)
+    }
 }
 
 async function getTripTeacherLocalization(req, res) {
@@ -162,5 +191,6 @@ export {
     getTripStudentsLocalization,
     getTripTeacherLocalization,
     uploadTripPhoto,
-    getTripPhotos
+    getTripPhotos,
+    getTripStudentsParentsPhoneNumbers
 };

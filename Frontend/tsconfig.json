@@ -15,5 +15,9 @@
         "@providers/*": ["providers/*"],
         
     }
-  }
+
+  },
+  "exclude": [
+    "@env",
+  ]
 }

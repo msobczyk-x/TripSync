@@ -2,42 +2,43 @@
 import { Box, Heading, Text, VStack, Flex, Button } from 'native-base'
 import React from 'react'
 import { useAuth } from '../../providers/AuthProvider'
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-const TripScreen = () => {
+import TaskList from '../../components/TasksList'
+import TripInfo from '../../components/TripInfo'
+import TripSchedule from '../../components/TripSchedule'
+import PhotosGrid from '../../components/PhotosGrid'
+import { ScrollView } from 'react-native'
+import { RefreshControl } from 'react-native'
+import PhonesList from '../../components/PhonesList'
+const TripScreen = ({navigation}:any) => {
   const {state} = useAuth();
   return (
-   <Box flex="1" safeAreaTop bgColor={"white"}>
-      {state.trip === null ? <Heading size={"sm"} >No current trip</Heading> :
-              <VStack space={10} p="8">
-              <Heading textAlign={"center"}  >{state.trip.trip_name} </Heading>
-              <Text fontSize={15} fontWeight={700}  >{state.trip.trip_description}</Text>
-
-              <Flex w={"100%"} alignItems={"center"} justifyContent={"space-between"} direction='row' bgColor={"blue.400"} p={10} rounded={"full"} >
-              <Text color={"white"}>{state.trip.start_location}</Text>
+    <ScrollView
+    contentContainerStyle={{ flexGrow: 1 }}
+    refreshControl={
+      <RefreshControl
+        refreshing={false}
+        onRefresh={() => {
+          navigation.navigate("Trip");
+        }}
+        style={{ flexGrow: 1 }}
+      />
+    }
+  >
+    <Box flex="1" safeAreaTop bgColor={"white"}>
+      {state.trip === null ? (
+        <Heading size={"sm"}>No current trip</Heading>
+      ) : (
+        <VStack space={8} px={8}>
+          <TripInfo trip={state.trip} />
+          <TripSchedule trip={state.trip} />
+          <PhonesList tripId={state.trip._id}/>
+          <TaskList tasks={state.trip.tasks}/>
+          <PhotosGrid user={state.user} trip={state.trip}/>
           
-
-    <MaterialCommunityIcons name="navigation" size={24} color="white" style={{
-                transform: [{ rotate: `90deg` }]
-              }} />
-           
-              <Text color={"white"}>{state.trip.end_location}</Text>
-              </Flex>
-              <Flex direction='row' alignItems={"center"} justifyContent={"space-between"}>
-             <Heading>
-              Photos 
-             </Heading>
-             <Button>
-                Add
-              </Button>
-             </Flex>
-              <Flex>
-              <Text textAlign={"center"}>No photos</Text>
-              </Flex>
-
-              </VStack>
-  
-}
-</Box>
+        </VStack>
+      )}
+    </Box>
+  </ScrollView>
   )
 }
 
