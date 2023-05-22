@@ -32,7 +32,7 @@ const start = async () => {
   const PORT = process.env.PORT || 3000;
 
  
-
+  app.use('/uploads', express.static('uploads'));
   mongoose.connect(mongoString);
   const db = mongoose.connection;
 

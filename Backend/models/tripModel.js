@@ -80,6 +80,20 @@ export const schoolTripSchema = new mongoose.Schema({
             required:false
         }
 
+    }],
+    trip_images: [{
+        path: {
+            type: String,
+            required: true
+        },
+        author: {
+            
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Student',
+                required: true
+            
+        }
+        
     }]
 
     });

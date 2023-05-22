@@ -1,5 +1,16 @@
 import express from "express";
 const router = express.Router();
+import multer from 'multer';
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/')
+  },
+  filename: function(req, file, cb) {
+    cb(null, file.originalname+'.jpg');
+  }
+});
+const upload = multer( {storage: storage });
 import {
   addStudent,
   getAllStudents,
@@ -25,6 +36,8 @@ import {
   getTripInProgressTeacher,
   getTripStudentsLocalization,
   getTripTeacherLocalization,
+  uploadTripPhoto,
+  getTripPhotos
 } from "../controllers/tripController.js";
 
 //Student
@@ -57,5 +70,6 @@ router.get("/getTripStudent/:id", getTripStudent);
 router.get("/getTripInProgressTeacher/:id", getTripInProgressTeacher);
 router.get("/getTripStudentsLocalization/:id", getTripStudentsLocalization);
 router.get("/getTripTeacherLocalization/:id", getTripTeacherLocalization);
-
+router.post("/uploadTripPhoto/:id/:author_id",upload.single('photo'), uploadTripPhoto);
+router.get("/getTripPhotos/:id", getTripPhotos);
 export default router;

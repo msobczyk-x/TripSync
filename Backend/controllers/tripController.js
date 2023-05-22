@@ -1,8 +1,10 @@
 import SchoolTrip from "../models/tripModel.js";
-
-
+import path from 'path';
+import fs from 'fs';
+import mongoose from "mongoose";
+import Student from "../models/studentModel.js";
 //Trip
-
+const __dirname = path.resolve();
 async function getTrip(req, res) {
     const trip = await SchoolTrip.findById(req.params.id);
 
@@ -86,10 +88,79 @@ async function getTripTeacherLocalization(req, res) {
         res.json(teacher);
 }
 
+async function uploadTripPhoto(req, res){
+
+    try {
+        const authorId = new mongoose.Types.ObjectId(req.params.author_id);
+   console.log(req.params.author_id)
+   console.log(req.file)
+    const trip = await SchoolTrip.findById(req.params.id);
+    if (trip) {
+        trip.trip_images.push({
+            path: req.file.path,
+            author: authorId,
+            
+        });
+        const updatedTrip = await trip.save();
+        res.send(updatedTrip);
+    } else {
+        res.status(404).json({ message: 'Trip not found' });
+    }
+}
+catch (error) {
+    console.log(error)
+    res.status(500).json({ message: error.message });
+}
+}
+
+async function getTripPhotos(req, res) {
+    const tripId = req.params.id;
+    const directoryPath = path.join(__dirname, 'uploads');
+    const trip = await SchoolTrip.findById(tripId);
+    fs.readdir(directoryPath, async (error, files) => {
+      if (error) {
+        console.log(error);
+        res.status(500).json({ message: 'Internal server error' });
+      } else {
+        const fileUrls = [];
+        
+        for (const file of files) {
+            console.log(file)
+           
+            if (trip.trip_images.some((image) => image.path.split('\\')[1] === file)){
+                const photo = {
+                    url: `http://192.168.1.24:3000/uploads/${file}`,
+                    author: {},
+                  };
+          
+                  const photoData = await trip.trip_images.find(
+                    (image) => image.path.split('\\')[1] === file
+                    ).author;
+                    const authorId = await Student.findById(photoData);
+                            console.log(photoData)
+                  if (photoData) {
+                    photo.author = {
+                      first_name: authorId.first_name,
+                      last_name: authorId.last_name,
+                    }
+                    
+                  }
+          
+                  fileUrls.push(photo);
+            }
+        }
+  
+        res.json(fileUrls);
+      }
+    });
+  }
+
 export {
     getTrip,
     getTripStudent,
     getTripInProgressTeacher,
     getTripStudentsLocalization,
-    getTripTeacherLocalization
+    getTripTeacherLocalization,
+    uploadTripPhoto,
+    getTripPhotos
 };
