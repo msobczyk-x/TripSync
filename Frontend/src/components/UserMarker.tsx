@@ -34,13 +34,13 @@ const UserMarker = ({userData, markerColor, userTitle}:any) => {
     }
     const interval = setInterval(() => {
       setBlink((prev) => !prev);
-    }, 1000);
+    }, 5000);
     return () => clearInterval(interval);
   }, [userData.location.lastUpdate]);
 
   return (
     <Marker
-    key={`${userData.first_name}-${userData.last_name}-${blink ? 'blink' : 'no-blink'}`}
+    key={`${userData.first_name}-${userData.last_name}-${blink ? 'blink' : 'no-blink'}-${userData.location.lastUpdate}}`}
     coordinate={{
       latitude: parseFloat(userData.location.latitude),
       longitude: parseFloat(userData.location.longitude),

@@ -68,18 +68,7 @@ const LocationScreen = () => {
             console.log(error);
           }); 
         }
-          axios
-          .get(
-            `http://192.168.1.24:3000/api/getTripStudentsLocalization/${state.trip._id}`
-          )
-          .then((response) => {
-            setStudentsMarkers(response.data);
-            console.log(response.data);
-            console.log(studentsMarkers);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
+          
         
       });
  
@@ -97,12 +86,25 @@ const LocationScreen = () => {
     }
   }, [location]);
 
-  let text = "Waiting..";
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
+  const fetchStudentsLocation = ()=> {
+    axios
+    .get(
+      `http://192.168.1.24:3000/api/getTripStudentsLocalization/${state.trip._id}`
+    )
+    .then((response) => {
+      setStudentsMarkers(response.data);
+
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+   }
+   useEffect(() => {
+     const interval = setInterval(() => {
+      fetchStudentsLocation();
+     }, 10000);
+     return () => clearInterval(interval);
+   }, [studentsMarkers]);
 
   return (
     <VStack style={styles.container}>

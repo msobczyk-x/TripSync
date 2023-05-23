@@ -35,6 +35,13 @@ const hasStartedBackgroundTaskRef = {
 function startBackgroundTaskIfNecessary() {
   if (hasStartedBackgroundTaskRef.hasStarted) return;
   Location.startLocationUpdatesAsync(BACKGROUND_TASK_NAME, {
+    showsBackgroundLocationIndicator: true,
+    timeInterval: 1000,
+    activityType: Location.ActivityType.Other,
+    foregroundService: {
+      notificationTitle: "Location tracking",
+      notificationBody: "Location tracking is on",
+    },
     accuracy: Location.Accuracy.Balanced,
   }).catch((e) => {
     hasStartedBackgroundTaskRef.hasStarted = false;

@@ -2,7 +2,7 @@ import { Button, Flex, Heading, Image, Modal, Pressable, Text } from 'native-bas
 import React, {useEffect} from 'react'
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
-import {v4} from 'uuid';
+import * as Crypto from 'expo-crypto';
 
 const PhotosGrid = ({trip, user, role}:any) => {
 
@@ -20,7 +20,12 @@ const PhotosGrid = ({trip, user, role}:any) => {
       });
       console.log(result);
       if (!result.canceled) {
-        setImages([...images, result.assets[0].uri]);
+        setImages([...images, {
+          url: result.assets[0].uri,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          file_name: result.assets[0].name,
+        }]);
         uploadImage(result.assets[0].uri);
       }
     };
@@ -41,7 +46,7 @@ const PhotosGrid = ({trip, user, role}:any) => {
       const data = new FormData();
       data.append("photo", {
         uri,
-        name: v4(),
+        name: Crypto.randomUUID(),
         type: "image/jpeg",
       } as unknown as Blob);
   

@@ -19,7 +19,7 @@ const TripScreen = ({ navigation }: any) => {
       contentContainerStyle={{ flexGrow: 1 }}
       refreshControl={
         <RefreshControl
-          refreshing={true}
+          refreshing={false}
           onRefresh={() => {
             setLoading(true);
             axios

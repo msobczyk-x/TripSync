@@ -15,6 +15,9 @@ import LoadingScreen from "../../screens/LoadingScreen";
 import * as SecureStore from "expo-secure-store";
 
 
+
+
+
 const LocationScreen = () => {
   const { state } = useAuth();
   const [location, setLocation] = useState<Location.LocationObject | null>(
@@ -72,8 +75,7 @@ const LocationScreen = () => {
         )
         .then((response) => {
           setTeacherMarker(response.data);
-          console.log(response.data);
-          console.log(teacherMarker);
+
         })
         .catch((error) => {
           console.log(error);
@@ -81,6 +83,24 @@ const LocationScreen = () => {
         
     })();
   }, []);
+const fetchTeacherLocation = ()=> {
+ axios
+  .get(
+    `http://192.168.1.24:3000/api/getTripTeacherLocalization/${state.trip._id}`
+  )
+  .then((response) => {
+    setTeacherMarker(response.data);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}
+useEffect(() => {
+  const interval = setInterval(() => {
+    fetchTeacherLocation();
+  }, 10000);
+  return () => clearInterval(interval);
+}, [teacherMarker]);
 
   useEffect(() => {
     if (location) {
@@ -93,12 +113,7 @@ const LocationScreen = () => {
     }
   }, [location]);
 
-  let text = "Waiting..";
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
+
 
   return (
     <VStack style={styles.container}>

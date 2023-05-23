@@ -19,6 +19,7 @@
       {
         "accuracy": 6,
         "locationAlwaysPermission": "Allow $(PRODUCT_NAME) to use your location",
+        "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location.",
         "isIosBackgroundLocationEnabled": true,
         "isAndroidBackgroundLocationEnabled": true
       },
@@ -34,9 +35,11 @@
           "location",
           "fetch"
         ],
+        "NSLocation*UsageDescription": "Allow $(PRODUCT_NAME) to use your location",
         "NSLocationAlwaysAndWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to use your location",
         "NSLocationWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to use your location",
         "NSLocationAlwaysUsageDescription": "Allow $(PRODUCT_NAME) to use your location"
+        
       }
     },
     "android": {

@@ -35,12 +35,7 @@ const AppStudent = () => {
     })();
   }, []);
 
-  let text = "Waiting..";
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
+
 
   useEffect(() => {
     SecureStore.getItemAsync("trip").then((value) => {
@@ -141,7 +136,7 @@ const AppStudent = () => {
         component={TripScreen}
         options={{
           tabBarLabel: "Trip",
-          headerShown: true,
+       
           headerTitleAlign: "center",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="passport" color={color} size={size} />
