@@ -39,12 +39,13 @@ async function updateStudentLocalization(req,res) {
   try {
 
       
-        console.log(req.body.location)
+        
         const result = await Student.findByIdAndUpdate(req.params.id, {
           location: req.body.location,
         });
     
         res.status(200).send("Location updated")
+        console.log(`Student localization updated`)
       } catch (err) {
         res.status(400).json({ message: err.message });
       }
