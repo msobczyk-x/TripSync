@@ -3,6 +3,7 @@ import React from 'react'
 import axios from 'axios'
 import {Linking} from 'react-native'
 import { sortByLastName } from '../utils/utils'
+import * as SecureStore from 'expo-secure-store'
 
 const PhonesList = ({tripId}:any) => {
     const [phones, setPhones] = React.useState<any>([])
@@ -11,13 +12,20 @@ const PhonesList = ({tripId}:any) => {
 
     React.useEffect(() => {
 
-   
-        axios.get(`http://192.168.1.24:3000/api/getTripStudentsPhoneNumbers/${tripId}`).then((response) => {
-            setPhones(sortByLastName(response.data))
-         
-    }).catch((error) => {
-        console.log(error)
-    })
+        SecureStore.getItemAsync('studentsPhones').then((phones) => {
+            if (phones){
+                setPhones(JSON.parse(phones))
+            }
+            else {
+                axios.get(`http://192.168.1.24:3000/api/getTripStudentsPhoneNumbers/${tripId}`).then((response) => {
+                    setPhones(sortByLastName(response.data))
+                    SecureStore.setItemAsync('studentsPhones', JSON.stringify(response.data))
+            }).catch((error) => {
+                console.log(error)
+            })
+            }
+        })
+        
 }, [])    
 
 

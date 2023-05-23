@@ -6,12 +6,28 @@ import {getTimeElapsed} from '../utils/utils'
 // check if time elapsed is more than 15 minutes
 // if yes, blink the marker
 // if no, don't blink the marker
+const isTooLongFromLastUpdate = (lastUpdate: string) => {
+  
+    const date = new Date(lastUpdate);
+    const now = new Date();
+    const diff = now.getTime() - date.getTime();
+  
+    const minute = 60 * 1000;
 
+  
+    if (diff < 15 * minute) {
+      console.log("less")
+      return false;
+    }
+    else {
+      console.log("more")
+      return true;
+    }
+
+}
 
 
 const UserMarker = ({userData, markerColor, userTitle}:any) => {
-
-  const [blink, setBlink] = React.useState<boolean>(false)
 
 
   return (
@@ -29,8 +45,10 @@ const UserMarker = ({userData, markerColor, userTitle}:any) => {
     description={getTimeElapsed(
         userData.location.lastUpdate
     ).toString()}
-    pinColor={blink ? "#FF0000": "FFFFFF" ||  markerColor || "#0000FF"}
+    
+    pinColor={  markerColor || "#AF0BB0" }
   />
+
   )
 }
 

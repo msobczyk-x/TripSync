@@ -6,10 +6,13 @@ import { VStack, Text } from "native-base";
 import { LatLng, Marker } from "react-native-maps";
 import axios from "axios";
 import { useAuth } from "../../providers/AuthProvider";
+//@ts-ignore
 import { OPENWEATHER_API_KEY } from "@env";
 import {getLocationGeocoordinates} from "../../utils/utils";
 import LocationMarker from "../../components/LocationMarker";
 import UserMarker from "../../components/UserMarker";
+import LoadingScreen from "../../screens/LoadingScreen";
+import * as SecureStore from "expo-secure-store";
 
 
 const LocationScreen = () => {
@@ -39,7 +42,30 @@ const LocationScreen = () => {
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
-
+      SecureStore.getItemAsync("tripLocationStartGeocooridnates").then((startMarker) => {
+        if (startMarker){
+          setStartLocationMarker(JSON.parse(startMarker));
+          SecureStore.getItemAsync("tripLocationEndGeocooridnates").then((endMarker) => {
+            if (endMarker){
+              setEndLocationMarker(JSON.parse(endMarker));
+              setLoading(false);
+            }
+          })
+        }
+        else{
+          Promise.all([
+            getLocationGeocoordinates(state.trip.start_location, OPENWEATHER_API_KEY, "#00FF00", "Start Location"),
+            getLocationGeocoordinates(state.trip.end_location, OPENWEATHER_API_KEY, "#0000FF", "End Location")
+          ]).then(([startMarker, endMarker]) => {
+            setStartLocationMarker(startMarker);
+            setEndLocationMarker(endMarker);
+            SecureStore.setItemAsync("tripLocationStartGeocooridnates", JSON.stringify(startMarker));
+            SecureStore.setItemAsync("tripLocationEndGeocooridnates", JSON.stringify(endMarker));
+            setLoading(false);
+          }).catch((error) => {
+            console.log(error);
+          });
+        }})
       axios
         .get(
           `http://192.168.1.24:3000/api/getTripTeacherLocalization/${state.trip._id}`
@@ -52,16 +78,7 @@ const LocationScreen = () => {
         .catch((error) => {
           console.log(error);
         });
-        Promise.all([
-          getLocationGeocoordinates(state.trip.start_location, OPENWEATHER_API_KEY, "#00FF00", "Start Location"),
-          getLocationGeocoordinates(state.trip.end_location, OPENWEATHER_API_KEY, "#FF0000", "End Location")
-        ]).then(([startMarker, endMarker]) => {
-          setStartLocationMarker(startMarker);
-          setEndLocationMarker(endMarker);
-          setLoading(false);
-        }).catch((error) => {
-          console.log(error);
-        });
+        
     })();
   }, []);
 
@@ -86,14 +103,7 @@ const LocationScreen = () => {
   return (
     <VStack style={styles.container}>
       {loading ? (
-        <Text
-          textAlign={"center"}
-          fontWeight={700}
-          fontSize={24}
-          justifyContent={"center"}
-        >
-          Loading...
-        </Text>
+        <LoadingScreen/>
       ) : (
         <MapView
           style={styles.map}

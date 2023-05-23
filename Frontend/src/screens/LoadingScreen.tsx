@@ -11,7 +11,7 @@ const LoadingScreen = () => {
       <Heading color="primary.500" fontSize="lg">
       Loading
       </Heading>
-    </HStack>;
+    </HStack>
     </Box>
   )
 }

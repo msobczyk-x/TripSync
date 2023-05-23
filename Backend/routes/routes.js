@@ -39,6 +39,8 @@ import {
   uploadTripPhoto,
   getTripPhotos,
   getTripStudentsParentsPhoneNumbers,
+  deleteTripPhoto,
+  updateTripTask,
 } from "../controllers/tripController.js";
 
 //Student
@@ -74,4 +76,9 @@ router.get("/getTripTeacherLocalization/:id", getTripTeacherLocalization);
 router.post("/uploadTripPhoto/:id/:author_id",upload.single('photo'), uploadTripPhoto);
 router.get("/getTripPhotos/:id", getTripPhotos);
 router.get("/getTripStudentsPhoneNumbers/:id", getTripStudentsParentsPhoneNumbers);
+router.delete("/deleteTripPhoto/:id/:file_name", deleteTripPhoto);
+router.post("/updateTripTask/:id/:task_id", updateTripTask);
+  
+
+
 export default router;

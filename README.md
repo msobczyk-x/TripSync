@@ -1,1 +1,3 @@
 # TripSync
+
+TripSync is a mobile application that is being done as part of a bachelor's project. It is application that helps teacher's during school trips. Application tracks location of students during trip and gives all of these important information's to teacher. Frontend of TripSync is built using React Native and integrates with various APIs, including the OpenWeather API and the Google Maps API. Backend is built using ExpressJS, MongoDB.

@@ -4,7 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import {v4} from 'uuid';
 
-const PhotosGrid = ({trip, user}:any) => {
+const PhotosGrid = ({trip, user, role}:any) => {
 
     const [images, setImages] = React.useState<any>([]);
     const [imagesLoading, setImagesLoading] = React.useState(true);
@@ -46,6 +46,7 @@ const PhotosGrid = ({trip, user}:any) => {
       } as unknown as Blob);
   
       try {
+        
         const response = await axios.post(
           `http://192.168.1.24:3000/api/uploadTripPhoto/${trip._id}/${user._id}`,
           data,
@@ -119,7 +120,25 @@ const PhotosGrid = ({trip, user}:any) => {
            
       <Image source={{ uri: modalImage?.url }} alt="Image" maxW={400} maxH={400} minH={300} minW={300}/>
           </Modal.Body>
-          <Modal.Footer>
+          <Modal.Footer justifyContent={"space-between"} alignItems={"center"}>
+            {role == "Teacher" && (
+              <Button bgColor={"danger.500"} onPress={()=> {
+                axios.delete(`http://192.168.1.24:3000/api/deleteTripPhoto/${trip._id}/${modalImage.file_name}`).then(res => {
+                  
+                  if (res.data == "File deleted"){
+                    setImages(images.filter((image: any) => image.file_name != modalImage.file_name));
+                    setisModalOpen(false);
+                  }
+                  else {
+                    console.log("Error deleting file")
+                  }
+                  
+                }
+                )
+              }}>
+                Delete
+              </Button>
+            )}
             <Text>
             Added by {modalImage?.author.first_name} {modalImage?.author.last_name}
             </Text>

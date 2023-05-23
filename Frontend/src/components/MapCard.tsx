@@ -24,9 +24,12 @@ const MapCard = ({navigation, state}:any) => {
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-      setLoading(false);
+      let location = await Location.getCurrentPositionAsync({}).then(
+        (location) => {
+          setLocation(location);
+          setLoading(false);
+        }
+      );
     })();
   }, []);
 
@@ -41,12 +44,6 @@ const MapCard = ({navigation, state}:any) => {
     }
   }, [location]);
 
-  let text = 'Waiting..';
-  if (errorMsg) {
-    text = errorMsg;
-  } else if (location) {
-    text = JSON.stringify(location);
-  }
 
   return (
     <Pressable onPress={() => {

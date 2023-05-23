@@ -65,6 +65,10 @@ export const useAuth = () => {
     SecureStore.deleteItemAsync('role');
     SecureStore.deleteItemAsync('userEmail');
     SecureStore.deleteItemAsync('trip');
+    SecureStore.deleteItemAsync('teacherPhoneNumber');
+    SecureStore.deleteItemAsync('tripLocationStartGeocoordinates');
+    SecureStore.deleteItemAsync('tripLocationEndGeocoordinates');
+    SecureStore.deleteItemAsync("studentsPhones");
   };
 
   const setTrip = (trip: any) => {
@@ -74,6 +78,7 @@ export const useAuth = () => {
 
   const setTeacherPhoneNumber = (teacherPhoneNumber: any) => {
     dispatch({ type: 'SET_TEACHER_PHONE_NUMBER', payload: {teacherPhoneNumber} });
+    SecureStore.setItemAsync('teacherPhoneNumber', JSON.stringify(teacherPhoneNumber));
   }
   // Add more methods if needed
 
