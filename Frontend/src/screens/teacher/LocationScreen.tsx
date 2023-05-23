@@ -120,7 +120,7 @@ const LocationScreen = () => {
           mapPadding={{ bottom: 0, top: 35, left: 0, right: 0 }}
         >
           {studentsMarkers && studentsMarkers.map((marker: any, index:number) => (
-            <UserMarker key={index} userData={marker} />
+            <UserMarker key={index} userData={marker}  />
           ))}
 
           {startLocationMarker.latitude && (

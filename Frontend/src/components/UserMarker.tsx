@@ -3,9 +3,7 @@ import React from 'react'
 import { Marker } from 'react-native-maps'
 import {getTimeElapsed} from '../utils/utils'
 
-// check if time elapsed is more than 15 minutes
-// if yes, blink the marker
-// if no, don't blink the marker
+
 const isTooLongFromLastUpdate = (lastUpdate: string) => {
   
     const date = new Date(lastUpdate);
@@ -16,22 +14,33 @@ const isTooLongFromLastUpdate = (lastUpdate: string) => {
 
   
     if (diff < 15 * minute) {
-      console.log("less")
+      console.log("not too long")
       return false;
     }
-    else {
-      console.log("more")
+   
+    console.log("too long")
       return true;
-    }
+    
 
 }
 
 
 const UserMarker = ({userData, markerColor, userTitle}:any) => {
+  const [blink, setBlink] = React.useState<boolean>(false);
 
+  React.useEffect(() => {
+    if (!isTooLongFromLastUpdate(userData.location.lastUpdate)) {
+      return;
+    }
+    const interval = setInterval(() => {
+      setBlink((prev) => !prev);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [userData.location.lastUpdate]);
 
   return (
     <Marker
+    key={`${userData.first_name}-${userData.last_name}-${blink ? 'blink' : 'no-blink'}`}
     coordinate={{
       latitude: parseFloat(userData.location.latitude),
       longitude: parseFloat(userData.location.longitude),
@@ -46,7 +55,7 @@ const UserMarker = ({userData, markerColor, userTitle}:any) => {
         userData.location.lastUpdate
     ).toString()}
     
-    pinColor={  markerColor || "#AF0BB0" }
+    pinColor={ markerColor || blink ? "#FF0000" : "#FFFF00"  }
   />
 
   )
