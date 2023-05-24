@@ -95,22 +95,31 @@ const AppStudent = () => {
 
 
   useEffect(() => {
-    socket.connect()
-    socket.on("connect", () => {
-      console.log("Connected to socket.io server");
-    }
-    )
-    socket.on("startChecklist", (data) => {
-      console.log("startChecklist")
-        setStudentAcceptModal(true);
-    });
-    console.log("socket useEffect")
-    return () => {
-    
-      socket.disconnect();
+    if (state.trip){
+        socket.auth = { userId: state.user._id,
+        tripId: state.trip._id,
+        role: "student",
+        teacherId: state.trip.teacher_id
+      };
+      socket.connect()
+      socket.on("connect", () => {
+        console.log("Connected to socket.io server");
+      }
+      )
+      socket.on("startChecklist", (data) => {
+        console.log("startChecklist")
+          setStudentAcceptModal(true);
+      });
+      console.log("socket useEffect")
+      return () => {
+        socket.off("startChecklist");
+        socket.off("connect");
+        socket.disconnect();
+      }
     }
 
-    },[])
+
+    },[state.trip])
   return (
     <>
     <Tab.Navigator

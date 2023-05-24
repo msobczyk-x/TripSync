@@ -59,12 +59,17 @@ const start = async () => {
   });
 const adminRouter = AdminJSExpress.buildRouter(admin);
 app.use(admin.options.rootPath, adminRouter);
-  
+
+const users = [];
+
 io.on("connection", (socket) => {
-    console.log("a user connected");
+    console.log(`a user ${socket.handshake.auth.userId} connected`);
+    users.push(socket.handshake.auth);
+    console.log(users);
     socket.on("disconnect", () => {
       console.log("user disconnected");
     });
+
 
     socket.on("showLocation", (msg) => {
       console.log("message: " + msg);
@@ -72,14 +77,14 @@ io.on("connection", (socket) => {
 
     socket.on("startCheckingStudents", (msg) => {
       console.log("startCheckingStudents: " + msg);
-      socket.broadcast.emit("startChecklist")
+      socket.broadcast.emit("startCheck")
   });
 
   socket.on("acceptedChecklist", (msg) => {
     console.log("acceptedChecklist: " + msg);
     
 });
-});
+})
 
 
 app.listen(PORT, () => {

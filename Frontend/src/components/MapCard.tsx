@@ -38,11 +38,12 @@ const MapCard = ({navigation, state}:any) => {
       setRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-        latitudeDelta: 0.05,
-        longitudeDelta: 0.05,
+        latitudeDelta: 2,
+        longitudeDelta: 2,
       });
       setLoading(false);
     }
+   
   }, [location]);
 
 
@@ -88,7 +89,6 @@ const MapCard = ({navigation, state}:any) => {
         ) : (
           <MapView style={styles.map}
           provider='google'
-            showsUserLocation={true}
             followsUserLocation={true}
             userLocationPriority='high'
             initialRegion={region}

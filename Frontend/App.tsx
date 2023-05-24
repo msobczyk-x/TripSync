@@ -12,10 +12,9 @@ import * as BackgroundFetch from 'expo-background-fetch';
 import * as Crypto from 'expo-crypto';
 const LOCATION_TRACKING = 'location-tracking';
 const BACKGROUND_FETCH_TASK = 'background-fetch-location';
-import {socket} from "../utils/socket";
 
-let l1;
-let l2;
+
+
 
 TaskManager.defineTask(LOCATION_TRACKING, async ({ data, error }) => {
 
@@ -48,8 +47,8 @@ TaskManager.defineTask(LOCATION_TRACKING, async ({ data, error }) => {
   })
       }
 
-      l1 = lat;
-      l2 = long;
+      let l1 = lat;
+      let l2 = long;
 
       console.log(
           `${new Date(Date.now()).toLocaleString()}: ${lat},${long} (Foreground) ${role}`
@@ -59,7 +58,7 @@ TaskManager.defineTask(LOCATION_TRACKING, async ({ data, error }) => {
 
 });
 
-TaskManager.defineTask('background-fetch-location', async ({data,error}) => {
+/* TaskManager.defineTask('background-fetch-location', async ({data,error}) => {
   const location = await Location.getCurrentPositionAsync({});
   const user = await SecureStore.getItemAsync('user');
   console.log(`user: ${user} BACKGROUND FETCH`)
@@ -103,15 +102,15 @@ TaskManager.defineTask('background-fetch-location', async ({data,error}) => {
       }
       return BackgroundFetch.BackgroundFetchResult.NewData;
 
-});
+}); */
 
-async function registerBackgroundFetchAsync() {
+/* async function registerBackgroundFetchAsync() {
   return BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
     minimumInterval: 60 * 15, // 15 minutes
     stopOnTerminate: false, // android only,
     startOnBoot: true, // android only
   });
-}
+} */
 
 
 export default function App() {
@@ -149,7 +148,7 @@ export default function App() {
     };
     config();
     startLocationTracking();
-    registerBackgroundFetchAsync();
+    /* registerBackgroundFetchAsync(); */
     
 }, []);
 
