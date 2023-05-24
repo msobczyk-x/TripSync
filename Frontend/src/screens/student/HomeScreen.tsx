@@ -26,6 +26,7 @@ const HomeScreen = ({ navigation }: any) => {
           refreshing={false}
           onRefresh={() => {
             navigation.navigate("Home");
+            
           }}
           style={{ flexGrow: 1 }}
         />

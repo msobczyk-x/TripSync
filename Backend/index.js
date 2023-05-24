@@ -9,6 +9,8 @@ import * as AdminJSMongoose from "@adminjs/mongoose";
 import Student from "./models/studentModel.js";
 import Teacher from "./models/teacherModel.js";
 import SchoolTrip from "./models/tripModel.js";
+import {Server } from "socket.io";
+import http from "http";
 
 AdminJs.registerAdapter(
     {
@@ -20,6 +22,17 @@ AdminJs.registerAdapter(
 const start = async () => {
   dotenv.config();
   const app = express();
+  const server = http.createServer(app);
+  const io = new Server({
+    cors: {
+      origin: "http://localhost:19000",
+      
+    },
+    connectionStateRecovery: {
+      maxDisconnectionDuration: 2 * 60 *1000,
+    },
+  });
+  io.listen(4000)
 
   app.options("*", cors({ origin: 'http://localhost:19000', optionsSuccessStatus: 200 }));
   
@@ -47,6 +60,27 @@ const start = async () => {
 const adminRouter = AdminJSExpress.buildRouter(admin);
 app.use(admin.options.rootPath, adminRouter);
   
+io.on("connection", (socket) => {
+    console.log("a user connected");
+    socket.on("disconnect", () => {
+      console.log("user disconnected");
+    });
+
+    socket.on("showLocation", (msg) => {
+      console.log("message: " + msg);
+    });
+
+    socket.on("startCheckingStudents", (msg) => {
+      console.log("startCheckingStudents: " + msg);
+      socket.broadcast.emit("startChecklist")
+  });
+
+  socket.on("acceptedChecklist", (msg) => {
+    console.log("acceptedChecklist: " + msg);
+    
+});
+});
+
 
 app.listen(PORT, () => {
     console.log(`AdminJS started on http://localhost:${PORT}${admin.options.rootPath}`)

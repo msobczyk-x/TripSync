@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, Button, Box } from "native-base";
+import React, { useState, useEffect, useContext } from "react";
+import { View, Text, Button, Box, Modal } from "native-base";
 import { useAuth } from "../providers/AuthProvider";
 import * as Location from "expo-location";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -15,13 +15,16 @@ import * as SecureStore from "expo-secure-store";
 import { color } from "native-base/lib/typescript/theme/styled-system";
 const Tab = createBottomTabNavigator();
 
+import {socket} from "../utils/socket";
 const AppStudent = () => {
+
   const { state, setTrip, setTeacherPhoneNumber } = useAuth();
   const [location, setLocation] = useState<Location.LocationObject>();
   const [errorMsg, setErrorMsg] = useState(null || "");
   const [loading, setLoading] = useState(true);
   const [tripStatus, setTripStatus] = useState(null || "");
   const [teacherPhoneNumber2, setTeacherPhoneNumber2] = useState(null || "");
+  const [studentAcceptModal, setStudentAcceptModal] = useState(false);
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -35,7 +38,7 @@ const AppStudent = () => {
     })();
   }, []);
 
-
+  
 
   useEffect(() => {
     SecureStore.getItemAsync("trip").then((value) => {
@@ -89,7 +92,27 @@ const AppStudent = () => {
   }
   }, [tripStatus]);
 
+
+
+  useEffect(() => {
+    socket.connect()
+    socket.on("connect", () => {
+      console.log("Connected to socket.io server");
+    }
+    )
+    socket.on("startChecklist", (data) => {
+      console.log("startChecklist")
+        setStudentAcceptModal(true);
+    });
+    console.log("socket useEffect")
+    return () => {
+    
+      socket.disconnect();
+    }
+
+    },[])
   return (
+    <>
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
@@ -167,6 +190,32 @@ const AppStudent = () => {
         }}
       />
     </Tab.Navigator>
+    <Modal isOpen={studentAcceptModal} closeOnOverlayClick={false}>
+      <Modal.Content>
+        <Modal.Header>Are you ready ?</Modal.Header>
+        <Modal.Body>
+          <Text>You need to check in</Text>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button.Group variant="ghost" space={2}>
+            <Button
+              onPress={() => {
+                socket.emit("acceptedChecklist", {
+                  student_id: state.user._id,
+                  teacher_id: state.trip.teacher_id,
+                  trip_id: state.trip._id,
+                })
+                setStudentAcceptModal(false);
+              }}
+              colorScheme="green"
+            >
+              Accept
+            </Button>
+          </Button.Group>
+        </Modal.Footer>
+      </Modal.Content>
+    </Modal>
+        </>
   );
 };
 

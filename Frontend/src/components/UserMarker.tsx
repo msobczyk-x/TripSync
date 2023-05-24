@@ -14,11 +14,11 @@ const isTooLongFromLastUpdate = (lastUpdate: string) => {
 
   
     if (diff < 15 * minute) {
-      console.log("not too long")
+
       return false;
     }
    
-    console.log("too long")
+
       return true;
     
 

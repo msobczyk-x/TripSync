@@ -12,6 +12,7 @@ import * as BackgroundFetch from 'expo-background-fetch';
 import * as Crypto from 'expo-crypto';
 const LOCATION_TRACKING = 'location-tracking';
 const BACKGROUND_FETCH_TASK = 'background-fetch-location';
+import {socket} from "../utils/socket";
 
 let l1;
 let l2;
@@ -60,19 +61,23 @@ TaskManager.defineTask(LOCATION_TRACKING, async ({ data, error }) => {
 
 TaskManager.defineTask('background-fetch-location', async ({data,error}) => {
   const location = await Location.getCurrentPositionAsync({});
-  const user = await SecureStore.getItemAsync('user').then((res)=> res && JSON.parse(res));
-  const role = await SecureStore.getItemAsync('role').then((res)=> res && JSON.parse(res));
+  const user = await SecureStore.getItemAsync('user');
+  console.log(`user: ${user} BACKGROUND FETCH`)
+
+  const role = await SecureStore.getItemAsync('role');
+  console.log (`role: ${role} BACKGROUND FETCH`)
   if (error) {
       console.log('LOCATION_TRACKING task ERROR:', error);
       return;
   }
   if (location && user && role) {
+      const userData = JSON.parse(user);
       const { locations }:any = data;
       let lat = locations[0].coords.latitude;
       let long = locations[0].coords.longitude;
 
       if (role == 'Student') {
-        axios.post(`http://192.168.1.24:3000/api/updateStudentLocalization/${user._id}` , {
+        axios.post(`http://192.168.1.24:3000/api/updateStudentLocalization/${userData._id}` , {
     location: {
       latitude: locations[0].coords.latitude,
       longitude: locations[0].coords.longitude,
@@ -80,7 +85,7 @@ TaskManager.defineTask('background-fetch-location', async ({data,error}) => {
     }
   })
       }else if(role == 'Teacher'){
-        axios.post(`http://192.168.1.24:3000/api/updateTeacherLocalization/${user._id}`, {
+        axios.post(`http://192.168.1.24:3000/api/updateTeacherLocalization/${userData._id}`, {
     location: {
       latitude: locations[0].coords.latitude,
       longitude: locations[0].coords.longitude,
@@ -142,12 +147,13 @@ export default function App() {
             console.log('Permission to access location granted');
         }
     };
-
     config();
+    startLocationTracking();
+    registerBackgroundFetchAsync();
+    
 }, []);
 
-startLocationTracking();
-registerBackgroundFetchAsync();
+
   return (
     <NativeBaseProvider>
       <AuthProvider>

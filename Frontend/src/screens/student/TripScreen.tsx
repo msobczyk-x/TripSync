@@ -1,4 +1,4 @@
-import { Box, Heading, VStack, ScrollView } from "native-base";
+import { Box, Heading, VStack, ScrollView, Button } from "native-base";
 import React, { useEffect } from "react";
 import { useAuth } from "../../providers/AuthProvider";
 
@@ -10,7 +10,11 @@ import TripSchedule from "../../components/TripSchedule";
 import PhotosGrid from "../../components/PhotosGrid";
 import axios from "axios";
 import LoadingScreen from "../../screens/LoadingScreen";
+import { socket } from "../../utils/socket";
+import { useContext } from "react";
+
 const TripScreen = ({ navigation }: any) => {
+
   const { state, setTrip } = useAuth();
   const [loading, setLoading] = React.useState(false);
 
@@ -54,6 +58,11 @@ const TripScreen = ({ navigation }: any) => {
           <Heading size={"sm"}>No current trip</Heading>
         ) : (
           <VStack space={8} px={8}>
+            <Button onPress={()=> {
+              socket.emit("startCheckingStudents");
+            }}>
+              hit it
+            </Button>
             <TripInfo trip={state.trip} />
             <TripSchedule trip={state.trip} />
             <TaskList tasks={state.trip.tasks} />

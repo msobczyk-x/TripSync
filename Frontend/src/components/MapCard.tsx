@@ -41,6 +41,7 @@ const MapCard = ({navigation, state}:any) => {
         latitudeDelta: 0.05,
         longitudeDelta: 0.05,
       });
+      setLoading(false);
     }
   }, [location]);
 
