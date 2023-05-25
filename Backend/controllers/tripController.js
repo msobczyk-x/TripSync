@@ -245,6 +245,21 @@ async function updateTripTask (req, res) {
     }
 }
 
+async function getTripStudents(req,res) {
+  try {
+    const trip = await SchoolTrip.findById(req.params.id).populate("students_id");
+    if (!trip) {
+      return res.status(404).json({ message: "Trip not found" });
+    }
+    console.log(trip.students_id)
+    res.status(200).json(trip.students_id);
+  }
+  catch(error) {
+    console.log(error);
+    res.status(500).json({ message: "Server error" });
+  }
+}
+
 export {
   getTrip,
   getTripStudent,
@@ -255,5 +270,6 @@ export {
   getTripPhotos,
   getTripStudentsParentsPhoneNumbers,
   deleteTripPhoto,
-  updateTripTask
+  updateTripTask,
+  getTripStudents
 };

@@ -201,14 +201,14 @@ const AppStudent = () => {
         }}
       />
     </Tab.Navigator>
-    <Modal isOpen={studentAcceptModal} closeOnOverlayClick={false}>
+    <Modal isOpen={studentAcceptModal} closeOnOverlayClick={false} justifyContent={"center"} alignItems={"center"} size={"xl"}>
       <Modal.Content>
         <Modal.Header>Are you ready ?</Modal.Header>
         <Modal.Body>
           <Text>You need to check in</Text>
         </Modal.Body>
         <Modal.Footer>
-          <Button.Group variant="ghost" space={2}>
+          
             <Button
               onPress={() => {
                 socket.emit("acceptedChecklist", {
@@ -222,7 +222,7 @@ const AppStudent = () => {
             >
               Accept
             </Button>
-          </Button.Group>
+          
         </Modal.Footer>
       </Modal.Content>
     </Modal>

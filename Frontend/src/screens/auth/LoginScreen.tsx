@@ -19,8 +19,7 @@ const LoginScreen = ({navigation}:any) => {
         navigation.navigate("LoginStudent")
 
       }} bg={'blue.400'} size="lg"
-      minW={150}
-      maxW={150}>
+      width={"40%"}>
         
         Student
       </Button>
@@ -32,8 +31,8 @@ const LoginScreen = ({navigation}:any) => {
       }}
       bg={'blue.600'}
       size="lg"
-      maxW={150}
-      minW={150}
+      width={"40%"}
+    
       >
   Teacher
       </Button>

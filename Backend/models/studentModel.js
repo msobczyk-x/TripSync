@@ -38,6 +38,10 @@ export const studentSchema = new mongoose.Schema({
                 }
         }
     },
+    school:{
+        type: String,
+        required: true
+    },
     code: {
         type: String,
         required: false,

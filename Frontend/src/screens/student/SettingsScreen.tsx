@@ -8,9 +8,17 @@ const SettingsScreen = () => {
   const [teacherAlertedMessage, setTeacherAlertedMessage] = React.useState("")
   const [alertStatus, setAlertStatus] = React.useState("warning")
   const [showAlert, setShowAlert] = React.useState(false)
+  const [buttonCountdown, setButtonCountdown] = React.useState(5)
+  const [buttonDisabled, setButtonDisabled] = React.useState(false)
+  let timeout: any = null
   useEffect(() => {
     socket.on('teacherAlerted', (data) => {
-      
+      if (data.error) {
+        setTeacherAlertedMessage(data.error)
+        setAlertStatus("error")
+        setShowAlert(true)
+        return
+      }
       setTeacherAlertedMessage("Teacher has been alerted")
       setAlertStatus("success")
       setShowAlert(true)
@@ -21,6 +29,20 @@ const SettingsScreen = () => {
     }
 
   }, [])
+
+  useEffect(() => {
+    if (buttonDisabled) {
+      timeout = setTimeout(() => {
+        setButtonCountdown(buttonCountdown - 1)
+      }, 1000)
+    }
+    if (buttonCountdown === 0) {
+      setButtonDisabled(false)
+      setButtonCountdown(5)
+      clearTimeout(timeout)
+    }
+   
+  }, [buttonCountdown, buttonDisabled])
 
 
   const {state,logout} = useAuth()
@@ -69,16 +91,22 @@ const SettingsScreen = () => {
           Linking.openURL(`tel:${state.teacherPhoneNumber}`)
         }}
         bg={"danger.600"}
+        w={"45%"}
         >
           Call your teacher
         </Button>
-        <Button onPress={() => {
-          socket.emit('alertTeacher', { studentId: state.user._id, teacherId: state.trip.teacher_id})
-          setShowAlert(true)      
-        }}
+        <Button disabled={buttonDisabled} onPress={() => {
+          if (!buttonDisabled) {
+            socket.emit('alertTeacher', { studentId: state.user._id, teacherId: state.trip.teacher_id, first_name: state.user.first_name, last_name: state.user.last_name})
+            setShowAlert(true)
+            setButtonDisabled(true)
+            
+          }
+          }}
         bg={"danger.600"}
+        w={"45%"}
         >
-          Alert your teacher
+          {buttonDisabled ? buttonCountdown :  "Alert your teacher"}
         </Button>
         </HStack>
        

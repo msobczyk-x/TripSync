@@ -83,14 +83,28 @@ io.on("connection", (socket) => {
   });
 
   socket.on("acceptedChecklist", (msg) => {
-    console.log("acceptedChecklist: " + msg);
+    try {
+      const teacherId = users.find((user) => user.userId === msg.teacher_id).socketId;
+      
+      io.to(teacherId).emit("studentAcceptedChecklist", msg)
+      
+    }
+    catch(err){
+      console.log(err)
+    }
   });
     socket.on("alertTeacher", (msg) => {
       console.log("alertTeacher: " + JSON.stringify(msg));
-      const teacherId = users.find((user) => user.userId === msg.teacherId).socketId;
+      try{
+        const teacherId = users.find((user) => user.userId === msg.teacherId).socketId;
       
-      io.to(teacherId).emit("alertTeacher", msg)
-      socket.emit("teacherAlerted")
+        io.to(teacherId).emit("alertTeacher", msg)
+        socket.emit("teacherAlerted")
+      }
+      catch(err){
+        socket.emit("teacherAlerted", {error: "Teacher is not connected"})
+      }
+     
 });
 socket.on("disconnect", () => {
   users = users.filter((user) => user.socketId !== socket.id);

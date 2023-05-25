@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { View, Text, Button, Box, Modal } from 'native-base'
+import { View, Text, Button, Box, Modal, Heading } from 'native-base'
 import { useAuth } from '../providers/AuthProvider'
 import * as Location from 'expo-location';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -186,17 +186,16 @@ const AppTeacher = () => {
           ),}}
 />
 </Tab.Navigator>
-    <Modal isOpen={teacherAlertModal} closeOnOverlayClick={true}>
+    <Modal isOpen={teacherAlertModal} closeOnOverlayClick={true} size={"xl"}>
     <Modal.Content>
       <Modal.Header>Student alerted</Modal.Header>
       <Modal.Body>
-        <Text>Alert !</Text>
-        <Text>
-          {teacherAlertMsg&&JSON.stringify(teacherAlertMsg)}
-        </Text>
+        <Heading size={"md"}>
+          {teacherAlertMsg&& teacherAlertMsg.first_name} {teacherAlertMsg&& teacherAlertMsg.last_name} has alerted you
+        </Heading>
       </Modal.Body>
       <Modal.Footer>
-        <Button.Group variant="ghost" space={2}>
+        <Button.Group variant="solid" space={2}>
           <Button
             onPress={() => {
               setTeacherAlertModal(false);

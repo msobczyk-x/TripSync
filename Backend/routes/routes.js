@@ -41,6 +41,7 @@ import {
   getTripStudentsParentsPhoneNumbers,
   deleteTripPhoto,
   updateTripTask,
+  getTripStudents
 } from "../controllers/tripController.js";
 
 //Student
@@ -78,6 +79,7 @@ router.get("/getTripPhotos/:id", getTripPhotos);
 router.get("/getTripStudentsPhoneNumbers/:id", getTripStudentsParentsPhoneNumbers);
 router.delete("/deleteTripPhoto/:id/:file_name", deleteTripPhoto);
 router.post("/updateTripTask/:id/:task_id", updateTripTask);
+router.get("/getTripStudents/:id", getTripStudents)
   
 
 

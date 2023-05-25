@@ -54,6 +54,7 @@ TaskManager.defineTask(LOCATION_TRACKING, async ({ data, error }) => {
           `${new Date(Date.now()).toLocaleString()}: ${lat},${long} (Foreground) ${role}`
       );
       }
+      
 
 
 });
