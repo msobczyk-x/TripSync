@@ -86,6 +86,7 @@ const PhotosGrid = ({trip, user, role}:any) => {
         justifyContent: "flex-start",
         alignItems: "center",
         gap: 20,
+        
       }}
     >
       {imagesLoading ? (
@@ -102,7 +103,7 @@ const PhotosGrid = ({trip, user, role}:any) => {
             >
               <Image
                 source={{ uri: image.url }}
-                style={{ width: 100, height: 100 }}
+                style={{ width: 100, height: 100}}
                 alt="Image"
               />
             </Pressable>

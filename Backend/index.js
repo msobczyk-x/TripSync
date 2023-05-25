@@ -60,11 +60,13 @@ const start = async () => {
 const adminRouter = AdminJSExpress.buildRouter(admin);
 app.use(admin.options.rootPath, adminRouter);
 
-const users = [];
+let users = [];
 
 io.on("connection", (socket) => {
     console.log(`a user ${socket.handshake.auth.userId} connected`);
-    users.push(socket.handshake.auth);
+    const socketUser = socket.handshake.auth;
+    socketUser.socketId = socket.id;
+    users.push(socketUser);
     console.log(users);
     socket.on("disconnect", () => {
       console.log("user disconnected");
@@ -77,15 +79,23 @@ io.on("connection", (socket) => {
 
     socket.on("startCheckingStudents", (msg) => {
       console.log("startCheckingStudents: " + msg);
-      socket.broadcast.emit("startCheck")
+      socket.broadcast.emit("startChecklist")
   });
 
   socket.on("acceptedChecklist", (msg) => {
     console.log("acceptedChecklist: " + msg);
-    
+  });
+    socket.on("alertTeacher", (msg) => {
+      console.log("alertTeacher: " + JSON.stringify(msg));
+      const teacherId = users.find((user) => user.userId === msg.teacherId).socketId;
+      
+      io.to(teacherId).emit("alertTeacher", msg)
+      socket.emit("teacherAlerted")
 });
-})
-
+socket.on("disconnect", () => {
+  users = users.filter((user) => user.socketId !== socket.id);
+});
+});
 
 app.listen(PORT, () => {
     console.log(`AdminJS started on http://localhost:${PORT}${admin.options.rootPath}`)

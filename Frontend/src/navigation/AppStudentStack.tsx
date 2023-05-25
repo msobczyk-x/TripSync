@@ -5,7 +5,7 @@ import * as Location from "expo-location";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/student/HomeScreen";
-import ProfileScreen from "../screens/student/ProfileScreen";
+import SettingsScreen from "../screens/student/SettingsScreen";
 import LocationScreen from "../screens/student/LocationScreen";
 import TripScreen from "../screens/student/TripScreen";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -96,7 +96,9 @@ const AppStudent = () => {
 
   useEffect(() => {
     if (state.trip){
-        socket.auth = { userId: state.user._id,
+        socket.auth = { 
+        socketId: socket.id,  
+        userId: state.user._id,
         tripId: state.trip._id,
         role: "student",
         teacherId: state.trip.teacher_id
@@ -188,13 +190,13 @@ const AppStudent = () => {
       />
 
       <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="Settings"
+        component={SettingsScreen}
         options={{
-          tabBarLabel: "Profile",
+          tabBarLabel: "Settings",
           headerTitleAlign: "center",
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account" color={color} size={size} />
+            <MaterialCommunityIcons name="cog" color={color} size={size} />
           ),
         }}
       />

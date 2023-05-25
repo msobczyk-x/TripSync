@@ -78,7 +78,7 @@ export const teacherSchema = new mongoose.Schema({
 });
 
 teacherSchema.pre('save', async function (next) {
-
+    if (this.isNew && !this.code) {
     const randomCode = nano(6);
     do {
         const checkCode = await mongoose.model('Teacher', teacherSchema).findOne({code: randomCode});
@@ -90,7 +90,7 @@ teacherSchema.pre('save', async function (next) {
             break;
         }
     } while (true);
-
+    }
   });
 
 export default mongoose.model('Teacher', teacherSchema);

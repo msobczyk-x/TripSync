@@ -86,6 +86,7 @@ export const studentSchema = new mongoose.Schema({
 });
 
 studentSchema.pre('save', async function (next) {
+    if (this.isNew && !this.code) {
     const randomCode = nano(6);
     do {
         const checkCode = await mongoose.model('Student', studentSchema).findOne({code: randomCode});
@@ -97,7 +98,7 @@ studentSchema.pre('save', async function (next) {
             break;
         }
     } while (true);
-
+    }
     next();
   });
 

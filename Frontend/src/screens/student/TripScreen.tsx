@@ -58,11 +58,7 @@ const TripScreen = ({ navigation }: any) => {
           <Heading size={"sm"}>No current trip</Heading>
         ) : (
           <VStack space={8} px={8}>
-            <Button onPress={()=> {
-              socket.emit("startCheckingStudents");
-            }}>
-              hit it
-            </Button>
+          
             <TripInfo trip={state.trip} />
             <TripSchedule trip={state.trip} />
             <TaskList tasks={state.trip.tasks} />

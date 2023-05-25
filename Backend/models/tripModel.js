@@ -99,7 +99,7 @@ export const schoolTripSchema = new mongoose.Schema({
     });
 
     schoolTripSchema.pre('save', async function (next) {
-
+        if (this.isNew && !this.code) {
         const randomCode = nano(6);
         do {
             const checkCode = await mongoose.model('SchoolTrip', schoolTripSchema).findOne({code: randomCode});
@@ -111,20 +111,25 @@ export const schoolTripSchema = new mongoose.Schema({
                 break;
             }
         } while (true);
-        
+        }
         const Student = mongoose.model('Student', studentSchema);
-
-        for (let i = 0; i < this.students_id.length; i++) {
-          const student = await Student.findById(this.students_id[i]);
-          student.trips.push(this._id);
-          await student.save();
+        const teacher = await Teacher.findById(this.teacher_id);
+        if (this.isNew)
+        {
+            for (let i = 0; i < this.students_id.length; i++) {
+        
+                const student = await Student.findById(this.students_id[i]);
+                student.trips.push(this._id);
+                await student.save();
+              }
+      
+              const Teacher = mongoose.model('Teacher', teacherSchema);
+      
+      
+        teacher.trips.push(this._id);
+        await teacher.save();
         }
 
-        const Teacher = mongoose.model('Teacher', teacherSchema);
-
-const teacher = await Teacher.findById(this.teacher_id);
-teacher.trips.push(this._id);
-  await teacher.save();
 }
     );
 

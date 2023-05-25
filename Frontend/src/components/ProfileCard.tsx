@@ -5,7 +5,7 @@ const ProfileCard = ({navigation, state}:any) => {
   return (
     <Pressable
     onPress={() => {
-      navigation.navigate("Profile");
+      
     }}
     w="90%"
     bg="primary.700"

@@ -17,20 +17,18 @@ const MapCard = ({navigation, state}:any) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    (async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
-        return;
-      }
+  
 
-      let location = await Location.getCurrentPositionAsync({}).then(
+
+      let location = Location.getLastKnownPositionAsync({}).then(
         (location) => {
           setLocation(location);
           setLoading(false);
         }
-      );
-    })();
+      ).catch((err) => {
+        console.log(err);
+      });
+
   }, []);
 
   useEffect(() => {
@@ -89,6 +87,7 @@ const MapCard = ({navigation, state}:any) => {
         ) : (
           <MapView style={styles.map}
           provider='google'
+          
             followsUserLocation={true}
             userLocationPriority='high'
             initialRegion={region}

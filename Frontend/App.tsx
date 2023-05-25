@@ -11,7 +11,7 @@ import axios from 'axios';
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as Crypto from 'expo-crypto';
 const LOCATION_TRACKING = 'location-tracking';
-const BACKGROUND_FETCH_TASK = 'background-fetch-location';
+/* const BACKGROUND_FETCH_TASK = 'background-fetch-location'; */
 
 
 
@@ -127,7 +127,7 @@ export default function App() {
               notificationTitle: 'Location Tracking',
               notificationBody: 'Used to track location in the background',
           },
-      });
+      }).catch((err) => console.log(err));
       const hasStarted = await Location.hasStartedLocationUpdatesAsync(
           LOCATION_TRACKING,
           

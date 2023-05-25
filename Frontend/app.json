@@ -35,10 +35,12 @@
           "location",
           "fetch"
         ],
-        "NSLocation*UsageDescription": "Allow $(PRODUCT_NAME) to use your location",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to use your location",
-        "NSLocationWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to use your location",
-        "NSLocationAlwaysUsageDescription": "Allow $(PRODUCT_NAME) to use your location"
+        "NSLocationWhenInUseUsageDescription":"Allow $(PRODUCT_NAME) to use your location",
+        "NSLocationUsageDescription": "Allow $(PRODUCT_NAME) to use your location",
+        "NSLocationAlwaysUsageDescription":"Allow $(PRODUCT_NAME) to use your location"
+        
+       
+        
         
       }
     },
@@ -46,9 +48,10 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff",
-        "NSLocationAlwaysAndWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to use your location",
-        "NSLocationWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to use your location",
-        "NSLocationAlwaysUsageDescription": "Allow $(PRODUCT_NAME) to use your location"
+        "NSLocationWhenInUseUsageDescription":"Allow $(PRODUCT_NAME) to use your location",
+        "NSLocationUsageDescription": "Allow $(PRODUCT_NAME) to use your location",
+        "NSLocationAlwaysUsageDescription":"Allow $(PRODUCT_NAME) to use your location",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Allow $(PRODUCT_NAME) to use your location"
       }
     },
     "web": {

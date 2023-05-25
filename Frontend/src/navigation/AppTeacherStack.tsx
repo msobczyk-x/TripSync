@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { View, Text, Button, Box } from 'native-base'
+import { View, Text, Button, Box, Modal } from 'native-base'
 import { useAuth } from '../providers/AuthProvider'
 import * as Location from 'expo-location';
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -7,11 +7,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/teacher/HomeScreen';
 import TripScreen from '../screens/teacher/TripScreen';
 import LocationScreen from '../screens/teacher/LocationScreen';
-import ProfileScreen from '../screens/teacher/ProfileScreen';
+import SettingsScreen from '../screens/teacher/SettingsScreen';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import axios from 'axios';
 import LoadingScreen from '../screens/LoadingScreen';
 import * as SecureStore from 'expo-secure-store';
+import {socket } from '../utils/socket';
 
 const Tab = createBottomTabNavigator();
 const AppTeacher = () => {
@@ -20,6 +21,8 @@ const AppTeacher = () => {
   const [errorMsg, setErrorMsg] = useState(null||'');  
   const [loading, setLoading] = useState(true)
   const [tripStatus, setTripStatus] = useState(null || '')
+  const [teacherAlertModal, setTeacherAlertModal] = useState(false)
+  const [teacherAlertMsg, setTeacherAlertMsg] = useState({} as any)
 
   useEffect(() => {
     (async () => {
@@ -83,10 +86,38 @@ const AppTeacher = () => {
   }, [])
 
 
+  useEffect(() => {
+    if (state.trip){
+        socket.auth = { 
+        userId: state.user._id,
+        tripId: state.trip._id,
+        role: "student",
+        teacherId: state.trip.teacher_id
+      };
+      socket.connect()
+      socket.on("connect", () => {
+        console.log("Connected to socket.io server");
+      }
+      )
+      socket.on("alertTeacher", msg => {
+        console.log("alerted")
+        setTeacherAlertModal(true)
+        setTeacherAlertMsg(msg)
+      })
+      console.log("socket useEffect")
+      return () => {
 
+        socket.off("connect");
+        socket.disconnect();
+      }
+    }
+
+
+    },[state.trip])
 
 
   return (
+    <>
 <Tab.Navigator
       screenOptions={{
         headerShown: false,
@@ -147,14 +178,38 @@ const AppTeacher = () => {
         }
         />
 
-        <Tab.Screen name="Profile" component={ProfileScreen} options={{
-          tabBarLabel: 'Profile',
+        <Tab.Screen name="Settings" component={SettingsScreen} options={{
+          tabBarLabel: 'Settings',
           headerTitleAlign: 'center',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),}}
 />
 </Tab.Navigator>
+    <Modal isOpen={teacherAlertModal} closeOnOverlayClick={true}>
+    <Modal.Content>
+      <Modal.Header>Student alerted</Modal.Header>
+      <Modal.Body>
+        <Text>Alert !</Text>
+        <Text>
+          {teacherAlertMsg&&JSON.stringify(teacherAlertMsg)}
+        </Text>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button.Group variant="ghost" space={2}>
+          <Button
+            onPress={() => {
+              setTeacherAlertModal(false);
+            }}
+            colorScheme="blue"
+          >
+            Ok
+          </Button>
+        </Button.Group>
+      </Modal.Footer>
+    </Modal.Content>
+  </Modal>
+  </>
   )
 }
 
