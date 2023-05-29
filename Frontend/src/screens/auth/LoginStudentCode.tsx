@@ -67,7 +67,7 @@ const LoginStudentCode = ({navigation}:any) => {
 
       <Text fontSize={25} fontWeight={"bold"} textAlign={"center"}>Verification code</Text>
       <Flex w={"100%"} alignItems={"center"}>
-      {error && <Text color={"red.600"} fontSize={30} fontWeight={900}>{error}</Text>}
+      {error && <Text textAlign={"center"} fontWeight={600} fontSize={"2xl"}color={"danger.500"}>{error}</Text>}
      
       <CodeField
         ref={ref}

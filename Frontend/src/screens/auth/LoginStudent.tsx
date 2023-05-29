@@ -42,7 +42,7 @@ const LoginStudent = ({navigation}:any) => {
         Next
         </Button>
         {
-          error ? <Text>{error}</Text> : null
+          error ? <Text textAlign={"center"} fontWeight={600} fontSize={"2xl"}color={"danger.500"}>{error}</Text> : null
         }
     </VStack>
     </Box>
