@@ -7,6 +7,7 @@ const initialState = {
     role: '',
     trip: null,
     teacherPhoneNumber: null,
+    pushToken: null
     // Add more properties if needed
   };
 
@@ -18,6 +19,7 @@ const initialState = {
           user: action.payload.user,
           role: action.payload.role,
           isAuthenticated: true,
+
         };
       case 'LOGOUT':
         return {
@@ -25,7 +27,9 @@ const initialState = {
           user: null,
           role: '',
           isAuthenticated: false,
-          trip: null
+          trip: null,
+          teacherPhoneNumber: null,
+          pushToken: null
         };
       case 'SET_TRIP':
         return {
@@ -37,6 +41,7 @@ const initialState = {
           ...state,
           teacherPhoneNumber: action.payload.teacherPhoneNumber
         };
+
       // Add more cases for other actions if needed
       default:
         return state;
@@ -51,7 +56,7 @@ export const useAuth = () => {
 
   const login = (user: any, role:any) => {
 
-    dispatch({ type: 'LOGIN', payload: {user, role} });
+    dispatch({ type: 'LOGIN', payload: {user, role}});
     SecureStore.setItemAsync('user', JSON.stringify(user));
     SecureStore.setItemAsync('isAuthenticated', JSON.stringify(true));
     SecureStore.setItemAsync('role', JSON.stringify(role));
@@ -69,6 +74,9 @@ export const useAuth = () => {
     SecureStore.deleteItemAsync('tripLocationStartGeocoordinates');
     SecureStore.deleteItemAsync('tripLocationEndGeocoordinates');
     SecureStore.deleteItemAsync("studentsPhones");
+    SecureStore.deleteItemAsync("tripId");
+    SecureStore.deleteItemAsync("teacherPhoneNumber");
+    SecureStore.deleteItemAsync("expoPushToken");
   };
 
   const setTrip = (trip: any) => {
@@ -80,6 +88,7 @@ export const useAuth = () => {
     dispatch({ type: 'SET_TEACHER_PHONE_NUMBER', payload: {teacherPhoneNumber} });
     SecureStore.setItemAsync('teacherPhoneNumber', JSON.stringify(teacherPhoneNumber));
   }
+
   // Add more methods if needed
 
   return {

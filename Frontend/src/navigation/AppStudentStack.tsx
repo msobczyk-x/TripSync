@@ -25,6 +25,7 @@ const AppStudent = () => {
   const [tripStatus, setTripStatus] = useState(null || "");
   const [teacherPhoneNumber2, setTeacherPhoneNumber2] = useState(null || "");
   const [studentAcceptModal, setStudentAcceptModal] = useState(false);
+  const [token, setToken] = useState(null || "");
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -36,6 +37,13 @@ const AppStudent = () => {
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
     })();
+    SecureStore.getItemAsync("expoPushToken").then((value) => {
+      if (value) {
+        setToken(value);
+        console.log (`expoPushToken: ${value}`)
+      }
+    }
+    );
   }, []);
 
   
@@ -95,13 +103,15 @@ const AppStudent = () => {
 
 
   useEffect(() => {
-    if (state.trip){
+  
+    if (state.trip && token !== null){
         socket.auth = { 
         socketId: socket.id,  
         userId: state.user._id,
         tripId: state.trip._id,
         role: "student",
-        teacherId: state.trip.teacher_id
+        teacherId: state.trip.teacher_id,
+        pushToken: token
       };
       socket.connect()
       socket.on("connect", () => {

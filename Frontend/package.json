@@ -41,7 +41,9 @@
     "react-native-svg": "13.4.0",
     "react-navigation": "^4.4.4",
     "socket.io-client": "^4.6.1",
-    "uuid": "^9.0.0"
+    "uuid": "^9.0.0",
+    "expo-notifications": "~0.18.1",
+    "expo-device": "~5.2.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

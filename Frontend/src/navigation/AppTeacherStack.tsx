@@ -23,7 +23,7 @@ const AppTeacher = () => {
   const [tripStatus, setTripStatus] = useState(null || '')
   const [teacherAlertModal, setTeacherAlertModal] = useState(false)
   const [teacherAlertMsg, setTeacherAlertMsg] = useState({} as any)
-
+  const [token, setToken] = useState<any>(null || "")
   useEffect(() => {
     (async () => {
       
@@ -36,6 +36,13 @@ const AppTeacher = () => {
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
     })();
+    SecureStore.getItemAsync("expoPushToken").then((value) => {
+      if (value) {
+        setToken(value);
+        console.log (`expoPushToken: ${value}`)
+      }
+    }
+    );
   }, []);
 
   let text = 'Waiting..';
@@ -92,7 +99,8 @@ const AppTeacher = () => {
         userId: state.user._id,
         tripId: state.trip._id,
         role: "student",
-        teacherId: state.trip.teacher_id
+        teacherId: state.trip.teacher_id,
+        pushToken: token
       };
       socket.connect()
       socket.on("connect", () => {
