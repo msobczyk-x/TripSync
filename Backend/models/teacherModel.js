@@ -13,10 +13,6 @@ export const teacherSchema = new mongoose.Schema({
                 }
         }
     },
-    password: {
-        type: String,
-        required: false
-    },
     first_name:{
         type: String,
         required: true,
