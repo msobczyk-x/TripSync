@@ -9,17 +9,15 @@ import * as AdminJSMongoose from "@adminjs/mongoose";
 import Student from "./models/studentModel.js";
 import Teacher from "./models/teacherModel.js";
 import SchoolTrip from "./models/tripModel.js";
-import {Server } from "socket.io";
+import { Server } from "socket.io";
 import http from "http";
-import {Expo } from "expo-server-sdk";
+import { Expo } from "expo-server-sdk";
 import { haversine } from "./utils/utils.js";
 
-AdminJs.registerAdapter(
-    {
-        Resource: AdminJSMongoose.Resource,
-        Database: AdminJSMongoose.Database,
-    }
-);
+AdminJs.registerAdapter({
+  Resource: AdminJSMongoose.Resource,
+  Database: AdminJSMongoose.Database,
+});
 
 const start = async () => {
   dotenv.config();
@@ -28,18 +26,22 @@ const start = async () => {
   const io = new Server({
     cors: {
       origin: "http://localhost:19000",
-      
     },
     connectionStateRecovery: {
-      maxDisconnectionDuration: 2 * 60 *1000,
+      maxDisconnectionDuration: 2 * 60 * 1000,
     },
   });
   const expo = new Expo();
-  io.listen(4000)
+  io.listen(4000);
 
-  app.options("*", cors({ origin: 'http://localhost:19000', optionsSuccessStatus: 200 }));
-  
-  app.use(cors({ origin: "http://localhost:19000", optionsSuccessStatus: 200 }));
+  app.options(
+    "*",
+    cors({ origin: "http://localhost:19000", optionsSuccessStatus: 200 })
+  );
+
+  app.use(
+    cors({ origin: "http://localhost:19000", optionsSuccessStatus: 200 })
+  );
 
   const mongoString = process.env.DATABASE_URL;
   app.use(express.json());
@@ -47,8 +49,7 @@ const start = async () => {
 
   const PORT = process.env.PORT || 3000;
 
- 
-  app.use('/uploads', express.static('uploads'));
+  app.use("/uploads", express.static("uploads"));
   mongoose.connect(mongoString);
   const db = mongoose.connection;
 
@@ -58,91 +59,127 @@ const start = async () => {
 
   const admin = new AdminJs({
     resources: [Student, Teacher, SchoolTrip],
-
   });
-const adminRouter = AdminJSExpress.buildRouter(admin);
-app.use(admin.options.rootPath, adminRouter);
+  const adminRouter = AdminJSExpress.buildRouter(admin);
+  app.use(admin.options.rootPath, adminRouter);
 
-let users = [];
-let studentLocationUpdates = [];
-let teacherLocationUpdates = [];
-let disconnectedUsers = [];
+  let users = [];
+  let studentLocationUpdates = [];
+  let teacherLocationUpdates = [];
+  let disconnectedUsers = [];
 
-setInterval(() => {
-  const currentTime = Date.now();
-  if (studentLocationUpdates.length > 0) {
-  const inactiveStudents = studentLocationUpdates.filter((student) => {
-    const lastUpdateTime = new Date(student.lastUpdateTime).getTime();
-    const timeElapsed = (currentTime - lastUpdateTime) / (1000 * 60); // Convert to minutes
-    return timeElapsed >= 10;
-  });
-  if (inactiveStudents.length > 0) {
-      for (let i = 0; i < inactiveStudents.length; i++) {
-        const student = inactiveStudents[i];
-        const teacher = users.find((user) => user.userId === student.teacherId);
-        if (teacher !== undefined) {
+  setInterval(() => {
+    const currentTime = Date.now();
+    try {
+
+    
+    if (studentLocationUpdates.length > 0) {
+      const inactiveStudents = studentLocationUpdates.filter((student) => {
+        const lastUpdateTime = new Date(student.lastUpdate).getTime();
+        const timeElapsed = (currentTime - lastUpdateTime) / (1000 * 60); // Convert to minutes
+        return timeElapsed > 10 ;
+      });
+
+      if (inactiveStudents.length > 0) {
+        for (let i = 0; i < inactiveStudents.length; i++) {
+          const student = inactiveStudents[i];
+          const studentObj = disconnectedUsers.find(
+            (user) => user.userId === student.userId
+          );
+          
+          let teacher = users.find((user) => user.userId === studentObj.teacherId);
+       
+          if (teacher == undefined) {
+            teacher = disconnectedUsers.find(
+              (user) => user.userId === student.teacherId
+            );
+          } else {
+            const teacherPushToken = teacher.pushToken;
+            if (Expo.isExpoPushToken(teacherPushToken)) {
+              console.log("Sending push notification");
+
+              expo.sendPushNotificationsAsync([
+                {
+                  to: teacherPushToken,
+                  sound: "default",
+                  title: "Student is inactive",
+                  body: `${studentObj.first_name} ${studentObj.last_name} is inactive for more than 10 minutes`,
+                  data: {},
+                },
+                {
+                  to: studentObj.pushToken,
+                  sound: "default",
+                  title: "You are inactive",
+                  body: `You are inactive for more than 10 minutes`,
+                  data: {},
+                },
+              ]);
+            }
+          }
+        }
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  }, 5 * 60 * 1000); // Run every 5 minutes
+
+  setInterval(() => {
+    try {
+
+    
+    const currentTime = Date.now();
+    for (let i = 0; i < studentLocationUpdates.length; i++) {
+      const student = studentLocationUpdates[i];
+      let studentObj = users.find((user) => user.userId === student.userId);
+      if (StudentObj == undefined) {
+        studentObj = disconnectedUsers.find(
+          (user) => user.userId === student.userId
+        );
+      let teacher = users.find((user) => user.userId === student.teacherId);
+      if (teacher == undefined) {
+        teacher = disconnectedUsers.find(
+          (user) => user.userId === student.teacherId
+        );
+      } else {
+        const distance = haversine(
+          student.latitude,
+          student.longitude,
+          teacher.latitude,
+          teacher.longitude
+        );
+        if (distance > 5) {
           const teacherPushToken = teacher.pushToken;
-          if (expo.isExpoPushToken(teacherPushToken)) {
+          if (Expo.isExpoPushToken(teacherPushToken)) {
             expo.sendPushNotificationsAsync([
               {
                 to: teacherPushToken,
                 sound: "default",
-                title: "Student is inactive",
-                body: `${student.first_name} ${student.last_name} is inactive for more than 10 minutes`,
-                data: {}
-
-          }, {
-            to:student.pushToken,
-            sound: "default",
-            title: "You are inactive",
-            body: `You are inactive for more than 10 minutes`,
-            data: {
-            }
+                title: "Student is out of range",
+                body: `${studentObj.first_name} ${studentObj.last_name} is out of range`,
+                data: {},
+              },
+              {
+                to: studentObj.pushToken,
+                sound: "default",
+                title: "You are out of range",
+                body: `You are out of range`,
+                data: {},
+              },
+            ]);
           }
-        ]);
-        }
-      }
-  }
-}
-  }
-}, 5 * 60 * 1000); // Run every 5 minutes
-
-setInterval(() => {
-  const currentTime = Date.now();
-  for (let i = 0; i < studentLocationUpdates.length; i++) {
-    const student = studentLocationUpdates[i];
-    const teacher = users.find((user) => user.userId === student.teacherId);
-    if (teacher !== undefined) {
-      const distance = haversine(student.latitude, student.longitude, teacher.latitude, teacher.longitude);
-      if (distance > 5) {
-        const teacherPushToken = teacher.pushToken;
-        if (expo.isExpoPushToken(teacherPushToken)) {
-          expo.sendPushNotificationsAsync([
-            {
-              to: teacherPushToken,
-              sound: "default",
-              title: "Student is out of range",
-              body: `${student.first_name} ${student.last_name} is out of range`,
-              data: {}
-            },
-            {
-              to:student.pushToken,
-              sound: "default",
-              title: "You are out of range",
-              body: `You are out of range`,
-              data: {
-              }
-            }
-          ]);
         }
       }
     }
   }
+}
+
+catch (error) {
+  console.log(error);
+}
 }, 15 * 60 * 1000); // Run every 15 minutes
 
-
-
-io.on("connection", (socket) => {
+  io.on("connection", (socket) => {
     console.log(`a user ${socket.handshake.auth.userId} connected`);
     const socketUser = socket.handshake.auth;
     socketUser.socketId = socket.id;
@@ -153,22 +190,33 @@ io.on("connection", (socket) => {
     });
 
     socket.on("studentLocationUpdated", (data) => {
-      const student = studentLocationUpdates.find((student) => student.userId === data.userId);
+      const student = studentLocationUpdates.find(
+        (student) => student.userId === data.userId
+      );
       if (student !== undefined) {
-        studentLocationUpdates = [...studentLocationUpdates.filter((student) => student.userId !== data.userId), data]
-      }
-      else {
+        studentLocationUpdates = [
+          ...studentLocationUpdates.filter(
+            (student) => student.userId !== data.userId
+          ),
+          data,
+        ];
+      } else {
         studentLocationUpdates.push(data);
       }
-
     });
 
     socket.on("teacherLocationUpdated", (data) => {
-      const teacher = teacherLocationUpdates.find((teacher) => teacher.userId === data.userId);
+      const teacher = teacherLocationUpdates.find(
+        (teacher) => teacher.userId === data.userId
+      );
       if (teacher !== undefined) {
-        teacherLocationUpdates = [...teacherLocationUpdates.filter((teacher) => teacher.userId !== data.userId), data]
-      }
-      else {
+        teacherLocationUpdates = [
+          ...teacherLocationUpdates.filter(
+            (teacher) => teacher.userId !== data.userId
+          ),
+          data,
+        ];
+      } else {
         teacherLocationUpdates.push(data);
       }
     });
@@ -179,42 +227,44 @@ io.on("connection", (socket) => {
 
     socket.on("startCheckingStudents", (msg) => {
       console.log("startCheckingStudents: " + msg);
-      socket.broadcast.emit("startChecklist")
-  });
+      socket.broadcast.emit("startChecklist");
+    });
 
-  socket.on("acceptedChecklist", (msg) => {
-    try {
-      const teacherId = users.find((user) => user.userId === msg.teacher_id).socketId;
-      
-      io.to(teacherId).emit("studentAcceptedChecklist", msg)
-      
-    }
-    catch(err){
-      console.log(err)
-    }
-  });
+    socket.on("acceptedChecklist", (msg) => {
+      try {
+        const teacherId = users.find(
+          (user) => user.userId === msg.teacher_id
+        ).socketId;
+
+        io.to(teacherId).emit("studentAcceptedChecklist", msg);
+      } catch (err) {
+        console.log(err);
+      }
+    });
     socket.on("alertTeacher", (msg) => {
       console.log("alertTeacher: " + JSON.stringify(msg));
-      try{
-        const teacherId = users.find((user) => user.userId === msg.teacherId).socketId;
-      
-        io.to(teacherId).emit("alertTeacher", msg)
-        socket.emit("teacherAlerted")
-      }
-      catch(err){
-        socket.emit("teacherAlerted", {error: "Teacher is not connected"})
-      }
-     
-});
-socket.on("disconnect", () => {
+      try {
+        const teacherId = users.find(
+          (user) => user.userId === msg.teacherId
+        ).socketId;
 
-  users = users.filter((user) => user.socketId !== socket.id);
-});
-});
+        io.to(teacherId).emit("alertTeacher", msg);
+        socket.emit("teacherAlerted");
+      } catch (err) {
+        socket.emit("teacherAlerted", { error: "Teacher is not connected" });
+      }
+    });
+    socket.on("disconnect", () => {
+      users = users.filter((user) => user.socketId !== socket.id);
+      disconnectedUsers.push(socket.handshake.auth.userId);
+    });
+  });
 
-app.listen(PORT, () => {
-    console.log(`AdminJS started on http://localhost:${PORT}${admin.options.rootPath}`)
-  })
+  app.listen(PORT, () => {
+    console.log(
+      `AdminJS started on http://localhost:${PORT}${admin.options.rootPath}`
+    );
+  });
 };
 
 start();

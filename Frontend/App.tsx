@@ -71,59 +71,7 @@ TaskManager.defineTask(LOCATION_TRACKING, async ({ data, error }) => {
 
 });
 
-/* TaskManager.defineTask('background-fetch-location', async ({data,error}) => {
-  const location = await Location.getCurrentPositionAsync({});
-  const user = await SecureStore.getItemAsync('user');
-  console.log(`user: ${user} BACKGROUND FETCH`)
 
-  const role = await SecureStore.getItemAsync('role');
-  console.log (`role: ${role} BACKGROUND FETCH`)
-  if (error) {
-      console.log('LOCATION_TRACKING task ERROR:', error);
-      return;
-  }
-  if (location && user && role) {
-      const userData = JSON.parse(user);
-      const { locations }:any = data;
-      let lat = locations[0].coords.latitude;
-      let long = locations[0].coords.longitude;
-
-      if (role == 'Student') {
-        axios.post(`http://192.168.1.24:3000/api/updateStudentLocalization/${userData._id}` , {
-    location: {
-      latitude: locations[0].coords.latitude,
-      longitude: locations[0].coords.longitude,
-      lastUpdate: new Date()
-    }
-  })
-      }else if(role == 'Teacher'){
-        axios.post(`http://192.168.1.24:3000/api/updateTeacherLocalization/${userData._id}`, {
-    location: {
-      latitude: locations[0].coords.latitude,
-      longitude: locations[0].coords.longitude,
-      lastUpdate: new Date()
-    }
-  })
-      }
-
-      l1 = lat;
-      l2 = long;
-
-      console.log(
-          `${new Date(Date.now()).toLocaleString()}: ${lat},${long} (Background)`
-      );
-      }
-      return BackgroundFetch.BackgroundFetchResult.NewData;
-
-}); */
-
-/* async function registerBackgroundFetchAsync() {
-  return BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
-    minimumInterval: 60 * 15, // 15 minutes
-    stopOnTerminate: false, // android only,
-    startOnBoot: true, // android only
-  });
-} */
 async function registerForPushNotificationsAsync() {
   let token;
   if (Device.isDevice) {
@@ -141,6 +89,7 @@ async function registerForPushNotificationsAsync() {
       projectId: "00ebcfcf-4552-417f-b7c1-7d9fef5a0590",
     })).data;
     console.log(token);
+    SecureStore.setItemAsync('expoPushToken', token);
   } else {
     alert('Must use physical device for Push Notifications');
   }

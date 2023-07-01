@@ -93,7 +93,7 @@ const AppStudent = () => {
       
           }
         }
-    }).catch((err) => {
+    }).catch((err:any) => {
       console.log(err.message);
     });
       ;
@@ -109,6 +109,8 @@ const AppStudent = () => {
         socketId: socket.id,  
         userId: state.user._id,
         tripId: state.trip._id,
+        first_name: state.user.first_name,
+        last_name: state.user.last_name,
         role: "student",
         teacherId: state.trip.teacher_id,
         pushToken: token
@@ -118,7 +120,7 @@ const AppStudent = () => {
         console.log("Connected to socket.io server");
       }
       )
-      socket.on("startChecklist", (data) => {
+      socket.on("startChecklist", (data:any) => {
         console.log("startChecklist")
           setStudentAcceptModal(true);
       });

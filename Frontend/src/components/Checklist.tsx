@@ -42,9 +42,9 @@ const Checklist = ({tripId, isOpen, onClose}:any) => {
       
             <Modal.Header>Checklist</Modal.Header>
             <Modal.Body>
-                <FlatList data={studentsList} renderItem={({item}:any) => {
+                {studentsList.map((item:any, index:any) => {
                     return (
-                        <Box>
+                        <Box key={index}>
                             <HStack justifyContent="space-between" alignItems={"center"}>
                                 <Text fontWeight={700}>
                                     {item.first_name} {item.last_name}
@@ -55,7 +55,7 @@ const Checklist = ({tripId, isOpen, onClose}:any) => {
                          
                         </Box>
                         
-                    )}}/>
+                    )})}
                     {allChecked && <Heading size={"sm"} textAlign={"center"} marginTop={4}>All students have checked in !</Heading>}
             </Modal.Body>
         <Modal.Footer>

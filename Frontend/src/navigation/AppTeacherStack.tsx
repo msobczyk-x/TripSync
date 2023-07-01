@@ -98,8 +98,7 @@ const AppTeacher = () => {
         socket.auth = { 
         userId: state.user._id,
         tripId: state.trip._id,
-        role: "student",
-        teacherId: state.trip.teacher_id,
+        role: "teacher",
         pushToken: token
       };
       socket.connect()
